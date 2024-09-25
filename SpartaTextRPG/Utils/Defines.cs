@@ -155,12 +155,14 @@ namespace SpartaTextRPG.Utils
             ArmorShopEvent = 23,
             AccessoryShopEvent = 24,
             InnEvent = 25,
+            BossEvent = 26,
 
             ItemShopObject = 31,
             WeaponShopObject = 32,
             ArmorShopObject = 33,
             AccessoryShopObject = 34,
             InnObject = 35,
+            BossObject = 36,
 
             Enter1 = 41,
             Enter2 = 42,
@@ -174,7 +176,9 @@ namespace SpartaTextRPG.Utils
 
             Tree = 71,
             Rock = 72,
+
             Water = 81,
+
             Wall = 91,
         }
 

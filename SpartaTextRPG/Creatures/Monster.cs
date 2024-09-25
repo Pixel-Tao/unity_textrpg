@@ -17,6 +17,7 @@ namespace SpartaTextRPG.Creatures
         public override Defines.CreatureType CreatureType => Defines.CreatureType.Monster;
         public Defines.MonsterType MonsterType { get; protected set; } = Defines.MonsterType.None;
         public int MonsterDataId { get; protected set; }
+        public string[] Messages { get; protected set; } = [];
 
         public void SetInfo(MonsterData data)
         {
@@ -29,9 +30,11 @@ namespace SpartaTextRPG.Creatures
 
             SetLevel(GameManager.Instance.Hero.Level);
             this.Uid = Util.GenerateUid();
-            this.Name = data.Name;
-            this.JobType = data.JobType;
+            this.MonsterDataId = data.DataId;
             this.MonsterType = data.MonsterType;
+            this.Name = data.Name;
+            this.Messages = data.Messages ?? [];
+            this.JobType = data.JobType;
             this.Description = data.Description;
             this.DefaultMaxHp += data.MaxHp;
             this.Hp = MaxHp;

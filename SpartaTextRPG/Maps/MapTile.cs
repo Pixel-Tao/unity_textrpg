@@ -44,6 +44,7 @@ namespace SpartaTextRPG.Maps
                 case Defines.TileType.ArmorShopEvent:
                 case Defines.TileType.AccessoryShopEvent:
                 case Defines.TileType.InnEvent:
+                case Defines.TileType.BossEvent:
                     return true;
 
                 default:

@@ -241,7 +241,13 @@ namespace SpartaTextRPG.Managers
             MonsterDict.Add(3401, new MonsterData { DataId = 3401, JobType = JobType.Thief, MonsterType = MonsterType.Elite, Name = "원숭이", Description = "재빠른 원숭이", Attack = 30, MaxHp = 600, Defense = 15, Speed = 50, Exp = 140, Gold = 2000, SkillIds = [], ItemIds = new int[] { 401 }, ItemDropRate = 0.5f });
             MonsterDict.Add(3402, new MonsterData { DataId = 3402, JobType = JobType.Thief, MonsterType = MonsterType.Elite, Name = "도둑", Description = "도둑", Attack = 45, MaxHp = 700, Defense = 20, Speed = 55, Exp = 150, Gold = 3000, SkillIds = [], ItemIds = new int[] { 402 }, ItemDropRate = 0.5f });
 
-            MonsterDict.Add(3501, new MonsterData { DataId = 3501, JobType = JobType.Mage, MonsterType = MonsterType.Boss, Name = "타락한 대마법사", Description = "이세계를 위협하는 악당", Attack = 100, MaxHp = 5000, Defense = 100, Speed = 150, Gold = 100000, SkillIds = [2103, 2104], ItemIds = [409, 410, 411, 412], ItemDropRate = 0.1f });
+            string[] bossMessages = [
+                "날 이곳에 가둔 제작자놈 가만두지 않겠다!",
+                "공들여 만든 이 세상을 모두 파괴하고 이곳을 탈출하겠다!",
+                "덤벼라 제작자의 동료 녀석아!"
+            ];
+
+            MonsterDict.Add(3501, new MonsterData { DataId = 3501, JobType = JobType.Mage, MonsterType = MonsterType.Boss, Name = "타락한 대마법사", Description = "이세계를 위협하는 악당", Attack = 100, MaxHp = 5000, Defense = 100, Speed = 150, Exp = 500, Gold = 100000, SkillIds = [2103, 2104], ItemIds = [409, 410, 411, 412], ItemDropRate = 0.1f, Messages = bossMessages });
         }
 
         public void LoadAllItems()

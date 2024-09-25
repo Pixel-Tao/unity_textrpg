@@ -40,6 +40,7 @@ namespace SpartaTextRPG.Maps
 
         public override int[] MonsterIds => [ 3101, 3102, 3103 ];
         public override int[] NpcIds => [];
+        public override int BossId => 0;
 
         public ForestField()
         {
@@ -129,7 +130,7 @@ namespace SpartaTextRPG.Maps
                         OnExit(Visitor, prevTile, tile.Value);
                         return;
                     }
-                    else if (RandomBattle())
+                    else if (RandomBattle(5))
                         return;
                 }
             }

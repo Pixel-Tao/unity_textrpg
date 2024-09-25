@@ -17,14 +17,21 @@ namespace SpartaTextRPG.Managers
             Warning
         }
 
+        class SystemMessage
+        {
+            public DateTime Time { get; set; }
+            public string Message { get; set; }
+            public SystemConsoleType Type { get; set; }
+        }
+
         private static int _writeLineCount = 0;
 
-        private static Queue<string> _messageQueue = new Queue<string>();
+        private static Queue<SystemMessage> _messageQueue = new Queue<SystemMessage>();
         private static int _maxQueueCount = 8;
         private static int _maxGuideLineCount = 1;
         private static int _siteLineCount = 2;
         public static int FixedLineCount => _maxQueueCount + _maxGuideLineCount + _siteLineCount;
-        private static int _endingCreditLineCount = 30;
+        private static int _endingCreditLineCount = 40;
         private static int _defaultLineCount = 8;
 
         public static void Init()
@@ -32,9 +39,13 @@ namespace SpartaTextRPG.Managers
             if (_messageQueue.Count == 0)
             {
                 _maxQueueCount = _defaultLineCount;
+                SystemMessage msg = new SystemMessage();
+                msg.Message = "";
+                msg.Type = SystemConsoleType.System;
+                msg.Time = DateTime.Now;
                 for (int i = 0; i < _maxQueueCount; i++)
                 {
-                    _messageQueue.Enqueue("");
+                    _messageQueue.Enqueue(msg);
                     Console.WriteLine(new string(' ', Console.WindowWidth));
                 }
 
@@ -224,6 +235,7 @@ namespace SpartaTextRPG.Managers
                 case Defines.TileType.ArmorShopEvent:
                 case Defines.TileType.AccessoryShopEvent:
                 case Defines.TileType.InnEvent:
+                case Defines.TileType.BossEvent:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.BackgroundColor = ConsoleColor.DarkGray;
                     Console.Write('■');
@@ -276,6 +288,11 @@ namespace SpartaTextRPG.Managers
                     Console.BackgroundColor = ConsoleColor.DarkGray;
                     Console.Write('♨');
                     break;
+                case Defines.TileType.BossObject:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.Write('☎');
+                    break;
             }
             Console.ResetColor();
         }
@@ -315,21 +332,45 @@ namespace SpartaTextRPG.Managers
 
         public static void ErrorWriteLine(string format, params object?[]? arg)
         {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
+            SystemMessage message = new SystemMessage();
+            message.Type = SystemConsoleType.Error;
+            message.Message = string.Format(format, arg);
+            message.Time = DateTime.Now;
 
-            SystemConsole(SystemConsoleType.Error, format, arg);
+            if (_messageQueue.Count >= _maxQueueCount)
+                _messageQueue.Dequeue();
+
+            _messageQueue.Enqueue(message);
+
+            QueueWriteLine();
         }
         public static void SystemWriteLine(string format, params object?[]? arg)
         {
-            Console.BackgroundColor = ConsoleColor.Gray;
-            Console.ForegroundColor = ConsoleColor.Black;
+            SystemMessage message = new SystemMessage();
+            message.Type = SystemConsoleType.System;
+            message.Message = string.Format(format, arg);
+            message.Time = DateTime.Now;
 
-            SystemConsole(SystemConsoleType.System, format, arg);
+            if (_messageQueue.Count >= _maxQueueCount)
+                _messageQueue.Dequeue();
+
+            _messageQueue.Enqueue(message);
+
+            QueueWriteLine();
         }
         public static void WarningWriteLine(string format, params object?[]? arg)
         {
-            SystemConsole(SystemConsoleType.Warning, format, arg);
+            SystemMessage message = new SystemMessage();
+            message.Type = SystemConsoleType.Warning;
+            message.Message = string.Format(format, arg);
+            message.Time = DateTime.Now;
+
+            if (_messageQueue.Count >= _maxQueueCount)
+                _messageQueue.Dequeue();
+
+            _messageQueue.Enqueue(message);
+
+            QueueWriteLine();
         }
 
         public static void CurrentSite(Defines.MapType mapType, string name, string desc = "")
@@ -350,22 +391,20 @@ namespace SpartaTextRPG.Managers
             Console.WriteLine(new string('=', Console.WindowWidth));
         }
 
-        private static void SystemConsole(SystemConsoleType type, string format, params object?[]? arg)
+        private static void QueueWriteLine()
         {
             Thread.Sleep(100);
+            DateTime now = DateTime.Now;
             int currentTop = Console.CursorTop;
             int currentLeft = Console.CursorLeft;
 
             Console.SetCursorPosition(0, 0);
 
-            if (_messageQueue.Count >= _maxQueueCount)
-                _messageQueue.Dequeue();
-
-            _messageQueue.Enqueue(string.Format(format, arg));
-            DateTime now = DateTime.Now;
             for (int i = 0; i < _maxQueueCount; i++)
             {
-                switch (type)
+                SystemMessage message = _messageQueue.ElementAt(i);
+
+                switch (message.Type)
                 {
                     case SystemConsoleType.Error:
                         Console.BackgroundColor = ConsoleColor.Red;
@@ -380,11 +419,13 @@ namespace SpartaTextRPG.Managers
                         Console.ForegroundColor = ConsoleColor.Black;
                         break;
                 }
+
                 Console.CursorLeft = 0;
                 Console.Write(new string(' ', Console.WindowWidth));
                 Console.CursorLeft = 0;
-                if (!string.IsNullOrWhiteSpace(_messageQueue.ElementAt(i)))
-                    Console.WriteLine($"[{now.ToString("HH:mm:ss")}] {_messageQueue.ElementAt(i)}");
+
+                if (!string.IsNullOrWhiteSpace(message.Message))
+                    Console.WriteLine($"[{message.Time.ToString("HH:mm:ss.fff")}] {message.Message}");
                 else
                     Console.WriteLine();
 
@@ -514,9 +555,13 @@ namespace SpartaTextRPG.Managers
         private static void EmptySystemLog()
         {
             _messageQueue.Clear();
+            SystemMessage msg = new SystemMessage();
+            msg.Message = "";
+            msg.Type = SystemConsoleType.System;
+            msg.Time = DateTime.Now;
             for (int i = 0; i < _maxQueueCount; i++)
             {
-                _messageQueue.Enqueue("");
+                _messageQueue.Enqueue(msg);
                 Console.WriteLine(new string(' ', Console.WindowWidth));
             }
         }
@@ -525,7 +570,8 @@ namespace SpartaTextRPG.Managers
             _maxQueueCount = _endingCreditLineCount;
             Flush();
             EmptySystemLog();
-
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
             void emptyLine(int count)
             {
                 for (int i = 0; i < count; i++)
@@ -536,37 +582,38 @@ namespace SpartaTextRPG.Managers
             }
 
             SystemWriteLine("이세계 텍스트 RPG");
-            emptyLine(5);
-            SystemWriteLine("제작 : 7조(인생한방이조) 김태호");
-            emptyLine(3);
+            emptyLine(2);
+            SystemWriteLine("제작 : 인생한방이조(7조) 김태호");
+            emptyLine(2);
             SystemWriteLine("기    획 : 김태호");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("각    본 : 김태호");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("연    출 : 김태호");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("개    발 : 김태호");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("리 소 스 : 김태호");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("고    생 : 김태호");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("특별출연 : 르탄이");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("지    원 : 스파르타코딩클럽 내일배움캠프");
-            emptyLine(3);
+            emptyLine(2);
             SystemWriteLine("한 마 디 : 플레이 해주셔서 베리 땡큐 감사!");
-            emptyLine(15);
+            emptyLine(5);
             SystemWriteLine($"{Defines.ACCEPT_KEY} 키를 누르면 다음으로 넘어갑니다.");
 
             while (Console.ReadKey().Key != Defines.ACCEPT_KEY)
             {
 
             }
-
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
             _maxQueueCount = _defaultLineCount;
-            _writeLineCount += _endingCreditLineCount - _defaultLineCount;
-            EmptySystemLog();
+            _messageQueue.Clear();
+            Init();
             Flush();
         }
     }

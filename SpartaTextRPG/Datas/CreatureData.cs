@@ -57,5 +57,6 @@ namespace SpartaTextRPG.Datas
         public float ItemDropRate;
         public int[]? SkillIds;
         public int[]? ItemIds;
+        public string[]? Messages;
     }
 }

@@ -37,6 +37,7 @@ namespace SpartaTextRPG.Maps
 
         public override int[] NpcIds => new int[] { 1101, 1104, 1107, 1110, 1113 };
         public override int[] MonsterIds => [];
+        public override int BossId => 0;
 
         public override Npc[] Npcs { get; protected set; }
 
