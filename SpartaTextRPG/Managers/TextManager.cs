@@ -306,7 +306,7 @@ namespace SpartaTextRPG.Managers
         {
             for (int i = 0; i < _writeLineCount; i++)
             {
-                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                Console.SetCursorPosition(0, Math.Max(Console.CursorTop - 1, FixedLineCount));
                 Console.Write(new string(' ', Console.WindowWidth));
             }
             Console.CursorLeft = 0;
@@ -352,6 +352,7 @@ namespace SpartaTextRPG.Managers
 
         private static void SystemConsole(SystemConsoleType type, string format, params object?[]? arg)
         {
+            Thread.Sleep(100);
             int currentTop = Console.CursorTop;
             int currentLeft = Console.CursorLeft;
 

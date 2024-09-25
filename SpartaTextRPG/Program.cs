@@ -10,7 +10,7 @@ namespace SpartaTextRPG
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.WindowHeight = 40;
+            Console.WindowHeight = 46;
             Console.WindowWidth = 150;
             Console.CursorVisible = false;
 

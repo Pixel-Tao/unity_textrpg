@@ -125,6 +125,7 @@ namespace SpartaTextRPG.Managers
         }
         public void Recall()
         {
+            EnterdMap = null;
             EnterWorld(SavedRecallPoint, Defines.TileType.RecallPoint);
         }
         public void GameEnd()
@@ -151,7 +152,6 @@ namespace SpartaTextRPG.Managers
 
         public void GameOver()
         {
-            TextManager.SystemWriteLine("플레이어가 사망하여 귀환지로 이동합니다.");
             EnterdMap = null;
             EnterWorld(SavedRecallPoint, Defines.TileType.RecallPoint);
         }

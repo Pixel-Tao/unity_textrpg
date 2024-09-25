@@ -106,7 +106,11 @@ namespace SpartaTextRPG.UIs.BattleUIs
                 {
                     if (hero.IsDead)
                     {
-                        GameManager.Instance.GameOver();
+                        TextManager.Flush();
+                        TextManager.SystemWriteLine("플레이어가 사망하여 귀환지로 이동합니다.");
+                        Thread.Sleep(1000);
+                        GameManager.Instance.Recall();
+                        hero.Rest();
                         return;
                     }
 
