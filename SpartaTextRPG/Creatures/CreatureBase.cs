@@ -113,7 +113,7 @@ namespace SpartaTextRPG.Creatures
         public virtual void SetBuffSkill(Skill skill)
         {
             SBuff = skill;
-            TextManager.SystemWriteLine($"{skill.Name} 버프 스킬 효과를 받았습니다.");
+            TextManager.LWriteLine($"{skill.Name} 버프 스킬 효과를 받았습니다.");
         }
         /// <summary>
         /// 레벨업
@@ -123,7 +123,7 @@ namespace SpartaTextRPG.Creatures
             if (level > Defines.CREATURE_MAX_LEVEL)
             {
                 level = Defines.CREATURE_MAX_LEVEL;
-                TextManager.SystemWriteLine("더 이상 레벨업 할 수 없습니다.");
+                TextManager.LWriteLine("더 이상 레벨업 할 수 없습니다.");
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace SpartaTextRPG.Creatures
             if (SBuff == null)
                 return 0;
 
-            switch(SBuff.SkillType)
+            switch (SBuff.SkillType)
             {
                 case Defines.SkillType.AttackBuff:
                     return (int)(SBuff.BuffPerValue * defaultValue);
@@ -217,6 +217,53 @@ namespace SpartaTextRPG.Creatures
             return true;
         }
 
+        public virtual void Consume(ConsumableItem? consumable)
+        {
+            // 소비 아이템 사용
+            TextManager.LWriteLine($"{consumable.Name}을(를) 사용하였습니다.");
+            SetConsumeableItem(consumable);
+            consumable.RemoveItem(); // 소비아이템 감소시킴
+        }
+        public virtual void SetConsumeableItem(ConsumableItem? consumable)
+        {
+            // 소비 아이템 효과만 적용
+            if (consumable == null) return;
+
+            switch (consumable.ConsumableType)
+            {
+                case Defines.ConsumableType.Heal:
+                    OnHealed(consumable.Value);
+                    break;
+                case Defines.ConsumableType.HpRegenBuff:
+                    CBuff = consumable;
+                    break;
+                case Defines.ConsumableType.MaxHpBuff:
+                    CBuff = consumable;
+                    BonusMaxHp += consumable.Value;
+                    break;
+                case Defines.ConsumableType.AttackBuff:
+                    CBuff = consumable;
+                    BonusAttack += consumable.Value;
+                    break;
+                case Defines.ConsumableType.DefenseBuff:
+                    CBuff = consumable;
+                    BonusDefense += consumable.Value;
+                    break;
+                case Defines.ConsumableType.SpeedBuff:
+                    CBuff = consumable;
+                    BonusSpeed += consumable.Value;
+                    break;
+            }
+
+            if (consumable.ConsumableType != Defines.ConsumableType.Heal)
+            {
+                TextManager.LWriteLine($"{Util.ConsumableTypeToString(consumable.ConsumableType)} 효과가 생겼습니다. 해당 효과는 던전 클리어 후 사라집니다.");
+            }
+
+            BonusUpdate();
+        }
+
+
         public bool IsDoubleAttack()
         {
             if (JobType == Defines.JobType.Thief)
@@ -229,12 +276,12 @@ namespace SpartaTextRPG.Creatures
         {
             if (SBuff != null)
             {
-                TextManager.SystemWriteLine($"{SBuff!.Name} 버프 효과가 사라졌습니다.");
+                TextManager.LWriteLine($"{SBuff!.Name} 버프 효과가 사라졌습니다.");
                 SBuff = null;
             }
             if (CBuff != null)
             {
-                TextManager.SystemWriteLine($"{CBuff!.Name} 버프 효과가 사라졌습니다.");
+                TextManager.LWriteLine($"{CBuff!.Name} 버프 효과가 사라졌습니다.");
                 CBuff = null;
             }
             BonusUpdate();

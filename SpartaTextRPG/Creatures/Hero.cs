@@ -38,7 +38,7 @@ namespace SpartaTextRPG.Creatures
 
             if (DataManager.Instance.JobDict.TryGetValue(jobType, out JobData? jobData) == false)
             {
-                TextManager.ErrorWriteLine("잘못된 직업입니다.");
+                TextManager.HWriteLine("잘못된 직업입니다.");
                 return;
             }
 
@@ -91,27 +91,27 @@ namespace SpartaTextRPG.Creatures
         {
             base.OnDamaged(damage, attacker);
             if (attacker == null)
-                TextManager.SystemWriteLine($"{Name}님이 {damage}의 피해를 입었습니다.");
+                TextManager.LWriteLine($"{Name}님이 {damage}의 피해를 입었습니다.");
             else
-                TextManager.SystemWriteLine($"{Name}님이 {attacker.Name}에 의해 {damage}의 피해를 입었습니다.");
+                TextManager.LWriteLine($"{Name}님이 {attacker.Name}에 의해 {damage}의 피해를 입었습니다.");
         }
         public override void OnHealed(int heal, CreatureBase? healer = null)
         {
             base.OnHealed(heal, healer);
             if (healer == null)
-                TextManager.SystemWriteLine($"{Name}님이 {heal} 회복되었습니다.");
+                TextManager.LWriteLine($"{Name}님이 {heal} 회복되었습니다.");
             else
-                TextManager.SystemWriteLine($"{Name}님이 {healer.Name}에 의해 체력이 {heal} 회복되었습니다.");
+                TextManager.LWriteLine($"{Name}님이 {healer.Name}에 의해 체력이 {heal} 회복되었습니다.");
         }
         public override void OnDead()
         {
-            TextManager.SystemWriteLine($"{Name}님이 사망하였습니다.");
+            TextManager.LWriteLine($"{Name}님이 사망하였습니다.");
         }
 
         public override void AddExp(int exp)
         {
             this.Exp += exp;
-            TextManager.SystemWriteLine($"{Name}님이 {exp}의 경험치를 획득했습니다.");
+            TextManager.LWriteLine($"{Name}님이 {exp}의 경험치를 획득했습니다.");
             if (this.Exp >= this.NextLevelExp)
             {
                 LevelUp();
@@ -132,7 +132,7 @@ namespace SpartaTextRPG.Creatures
         public override void LevelUp()
         {
             base.LevelUp();
-            TextManager.SystemWriteLine("레벨이 올랐습니다! 상태를 회복합니다!");
+            TextManager.LWriteLine("레벨이 올랐습니다! 상태를 회복합니다!");
         }
         public override void BonusUpdate()
         {
@@ -163,13 +163,13 @@ namespace SpartaTextRPG.Creatures
             // 장비 착용
             if (equipment.UseableHero != JobType)
             {
-                TextManager.SystemWriteLine("사용 가능한 직업이 아닙니다.");
+                TextManager.LWriteLine("사용 가능한 직업이 아닙니다.");
                 return;
             }
 
             if (equipment.RequiredLevel > Level)
             {
-                TextManager.SystemWriteLine("착용 가능 레벨이 부족합니다.");
+                TextManager.LWriteLine("착용 가능 레벨이 부족합니다.");
                 return;
             }
 
@@ -195,7 +195,7 @@ namespace SpartaTextRPG.Creatures
             BonusDefense += equipment.Defense;
             BonusSpeed += equipment.Speed;
             BonusUpdate();
-            TextManager.SystemWriteLine($"{equipment.Name}을(를) 장착하였습니다.");
+            TextManager.LWriteLine($"{equipment.Name}을(를) 장착하였습니다.");
         }
         public void Unequip(Defines.EquipmentType equipmentType)
         {
@@ -238,56 +238,10 @@ namespace SpartaTextRPG.Creatures
 
             if (prevEquipment != null)
             {
-                TextManager.SystemWriteLine($"{prevEquipment.Name}을(를) 장착해제 하였습니다.");
+                TextManager.LWriteLine($"{prevEquipment.Name}을(를) 장착해제 하였습니다.");
                 BonusUpdate();
             }
         }
-        public void Consume(ConsumableItem? consumable)
-        {
-            // 소비 아이템 사용
-            TextManager.SystemWriteLine($"{consumable.Name}을(를) 사용하였습니다.");
-            SetConsumeableItem(consumable);
-            consumable.RemoveItem(); // 소비아이템 감소시킴
-        }
-        public void SetConsumeableItem(ConsumableItem? consumable)
-        {
-            // 소비 아이템 효과만 적용
-            if (consumable == null) return;
-
-            switch (consumable.ConsumableType)
-            {
-                case Defines.ConsumableType.Heal:
-                    OnHealed(consumable.Value);
-                    break;
-                case Defines.ConsumableType.HpRegenBuff:
-                    CBuff = consumable;
-                    break;
-                case Defines.ConsumableType.MaxHpBuff:
-                    CBuff = consumable;
-                    BonusMaxHp += consumable.Value;
-                    break;
-                case Defines.ConsumableType.AttackBuff:
-                    CBuff = consumable;
-                    BonusAttack += consumable.Value;
-                    break;
-                case Defines.ConsumableType.DefenseBuff:
-                    CBuff = consumable;
-                    BonusDefense += consumable.Value;
-                    break;
-                case Defines.ConsumableType.SpeedBuff:
-                    CBuff = consumable;
-                    BonusSpeed += consumable.Value;
-                    break;
-            }
-
-            if (consumable.ConsumableType != Defines.ConsumableType.Heal)
-            {
-                TextManager.SystemWriteLine($"{Util.ConsumableTypeToString(consumable.ConsumableType)} 효과가 생겼습니다. 해당 효과는 던전 클리어 후 사라집니다.");
-            }
-
-            BonusUpdate();
-        }
-
         public override bool IsEquipped(EquipmentItem eqItem)
         {
             if (eqItem == null) return false;

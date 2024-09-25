@@ -122,7 +122,7 @@ namespace SpartaTextRPG.Maps
                         // Boss와 전투하기
                         if (DataManager.Instance.MonsterDict.TryGetValue(BossId, out MonsterData data) == false)
                         {
-                            TextManager.ErrorWriteLine("보스 정보를 찾을 수 없습니다.");
+                            TextManager.HWriteLine("보스 정보를 찾을 수 없습니다.");
                             continue;
                         }
                         string alert = Defines.LAST_BOSS_ID == data.DataId 
@@ -142,7 +142,7 @@ namespace SpartaTextRPG.Maps
                 MapTile? tile = MapTiles.FirstOrDefault(v => v.Position.Compare(nextPos));
                 if (tile == null)
                 {
-                    TextManager.ErrorWriteLine("잘못된 이동입니다.");
+                    TextManager.HWriteLine("잘못된 이동입니다.");
                     continue;
                 }
                 else if (tile.Value.CanMoveToTile())
@@ -171,11 +171,11 @@ namespace SpartaTextRPG.Maps
 
             if (DataManager.Instance.MonsterDict.TryGetValue(BossId, out MonsterData data) == false)
             {
-                TextManager.ErrorWriteLine("보스 정보를 찾을 수 없습니다.");
+                TextManager.HWriteLine("보스 정보를 찾을 수 없습니다.");
                 return;
             }
 
-            TextManager.SystemWriteLine($"{data.Name} 보스에게 도달했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 보스와 전투를 할 수 있습니다.");
+            TextManager.LWriteLine($"{data.Name} 보스에게 도달했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 보스와 전투를 할 수 있습니다.");
         }
     }
 }

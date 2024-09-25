@@ -19,10 +19,10 @@ namespace SpartaTextRPG.UIs.GameUIs
 
         public override void Show(CreatureBase? visitor = null)
         {
-            TextManager.SystemWriteLine("게임을 저장합니다. 잠시만 기다려주세요.");
+            TextManager.LWriteLine("게임을 저장합니다. 잠시만 기다려주세요.");
             Thread.Sleep(500);
             SaveManager.Instance.Save();
-            TextManager.SystemWriteLine("게임 저장이 완료되었습니다.");
+            TextManager.LWriteLine("게임 저장이 완료되었습니다.");
         }
     }
 }

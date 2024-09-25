@@ -26,7 +26,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
         {
             if (Owner == null)
             {
-                TextManager.ErrorWriteLine("Owner is null");
+                TextManager.HWriteLine("Owner is null");
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
                         case Defines.MenuType.Use:
                             if (Owner.SkillBook.CanUseSkill(GetSelectedSkillId()) == false)
                             {
-                                TextManager.WarningWriteLine("스킬을 사용할 수 없습니다.");
+                                TextManager.MWriteLine("스킬을 사용할 수 없습니다.");
                                 continue;
                             }
                             // selectedSkillIndex 는 SelectSkill 함수에서 선택 했으므로 그냥 return 하면 됨. 

@@ -59,7 +59,7 @@ namespace SpartaTextRPG.Skills
         {
             if (DataManager.Instance.SkillDict.TryGetValue(skillDataId, out SkillData data) == false)
             {
-                TextManager.WarningWriteLine($"스킬 데이터를 찾을 수 없습니다. id: {skillDataId}");
+                TextManager.MWriteLine($"스킬 데이터를 찾을 수 없습니다. id: {skillDataId}");
                 return;
             }
             DataId = data.DataId;
@@ -98,19 +98,19 @@ namespace SpartaTextRPG.Skills
         {
             if (Owner.Level < RequiredLevel)
             {
-                TextManager.SystemWriteLine("레벨이 부족합니다.");
+                TextManager.LWriteLine("레벨이 부족합니다.");
                 return false;
             }
             if (CurrentCastCount <= 0)
             {
-                TextManager.SystemWriteLine("스킬 사용 가능 횟수가 없습니다.");
+                TextManager.LWriteLine("스킬 사용 가능 횟수가 없습니다.");
                 return false;
             }
 
             if (Owner.CreatureType == Defines.CreatureType.Hero)
-                TextManager.SystemWriteLine($"{Owner.Name}님이 {Name} 스킬을 사용했습니다.");
+                TextManager.LWriteLine($"{Owner.Name}님이 {Name} 스킬을 사용했습니다.");
             else
-                TextManager.SystemWriteLine($"{Owner.Name}이(가) {Name} 스킬을 사용했습니다.");
+                TextManager.LWriteLine($"{Owner.Name}이(가) {Name} 스킬을 사용했습니다.");
 
             switch (SkillType)
             {
@@ -137,8 +137,6 @@ namespace SpartaTextRPG.Skills
                     break;
             }
 
-            CurrentCastCount--;
-
             return true;
         }
 
@@ -146,12 +144,12 @@ namespace SpartaTextRPG.Skills
         {
             if (Owner.Level < RequiredLevel)
             {
-                TextManager.SystemWriteLine("레벨이 부족합니다.");
+                TextManager.LWriteLine("레벨이 부족합니다.");
                 return;
             }
             if (CurrentCastCount <= 0)
             {
-                TextManager.SystemWriteLine("스킬 사용 가능 횟수가 없습니다.");
+                TextManager.LWriteLine("스킬 사용 가능 횟수가 없습니다.");
                 return;
             }
             int value = (int)(Owner.Attack * DamagePerValue);
@@ -162,12 +160,12 @@ namespace SpartaTextRPG.Skills
         {
             if (Owner.Level < RequiredLevel)
             {
-                TextManager.SystemWriteLine("레벨이 부족합니다.");
+                TextManager.LWriteLine("레벨이 부족합니다.");
                 return;
             }
             if (CurrentCastCount <= 0)
             {
-                TextManager.SystemWriteLine("스킬 사용 가능 횟수가 없습니다.");
+                TextManager.LWriteLine("스킬 사용 가능 횟수가 없습니다.");
                 return;
             }
             int value = (int)(Owner.Attack * HealPerValue);
@@ -182,6 +180,10 @@ namespace SpartaTextRPG.Skills
         public void AddCount(int count = 1)
         {
             CurrentCastCount += count;
+        }
+        public void RemoveCount(int count = 1)
+        {
+            CurrentCastCount -= count;
         }
 
     }

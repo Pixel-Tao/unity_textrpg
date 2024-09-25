@@ -90,12 +90,12 @@ namespace SpartaTextRPG.Items
             ItemBase? item = Items.FirstOrDefault(s => s?.DataId == dataId);
             if (item == null)
             {
-                TextManager.WarningWriteLine("해당 아이템을 찾을 수 없습니다.");
+                //TextManager.WarningWriteLine("해당 아이템을 찾을 수 없습니다.");
                 return;
             }
             if (item.ItemType != Defines.ItemType.Equipment)
             {
-                TextManager.WarningWriteLine("장비 아이템이 아닙니다.");
+                TextManager.MWriteLine("장비 아이템이 아닙니다.");
                 return;
             }
             hero.Equip(item.CastItem<EquipmentItem>());
@@ -117,14 +117,14 @@ namespace SpartaTextRPG.Items
                 }
                 else
                 {
-                    TextManager.WarningWriteLine("해당 아이템을 찾을 수 없습니다.");
+                    TextManager.MWriteLine("해당 아이템을 찾을 수 없습니다.");
                     return;
                 }
 
             }
             if (item.ItemType != Defines.ItemType.Consumable)
             {
-                TextManager.WarningWriteLine("소비 아이템이 아닙니다.");
+                TextManager.MWriteLine("소비 아이템이 아닙니다.");
                 return;
             }
             hero.SetConsumeableItem(item.CastItem<ConsumableItem>());
@@ -168,12 +168,12 @@ namespace SpartaTextRPG.Items
         }
         public void AddGold(int gold)
         {
-            TextManager.SystemWriteLine($"{Owner.Name}님이 {gold}G를 획득했습니다.");
+            TextManager.LWriteLine($"{Owner.Name}님이 {gold}G를 획득했습니다.");
             Gold += gold;
         }
         public void RemoveGold(int gold)
         {
-            TextManager.SystemWriteLine($"{Owner.Name}님이 {gold}G를 사용했습니다.");
+            TextManager.LWriteLine($"{Owner.Name}님이 {gold}G를 사용했습니다.");
             Gold -= gold;
         }
         public void AddItem(ItemBase item, int count = 1)
@@ -263,7 +263,7 @@ namespace SpartaTextRPG.Items
         public void SortItems()
         {
             Items = Items.OrderBy(x => x == null).ThenBy(x => x?.ItemType).ThenBy(x => x?.Name).ThenBy(x => x?.DataId).ToArray();
-            TextManager.SystemWriteLine("아이템을 정렬했습니다.");
+            TextManager.LWriteLine("아이템을 정렬했습니다.");
         }
         public bool IsFull()
         {
@@ -325,6 +325,18 @@ namespace SpartaTextRPG.Items
         public ItemBase? GetItem(int dataId)
         {
             return Items.FirstOrDefault(s => s?.DataId == dataId);
+        }
+
+        public bool IsEmpty()
+        {
+            return Items.All(s => s == null);
+        }
+
+        public T[] GetItems<T>() where T : ItemBase
+        {
+            return Items.Where(s => s != null && s.GetType() == typeof(T))
+                .Select(s => s.CastItem<T>())
+                .ToArray();
         }
     }
 }

@@ -39,7 +39,7 @@ namespace SpartaTextRPG.Managers
         {
             if (mapType == Defines.MapType.None)
             {
-                TextManager.ErrorWriteLine("맵 정보가 없습니다.");
+                TextManager.HWriteLine("맵 정보가 없습니다.");
                 JobManager.Instance.Push(UIManager.Instance.GameTitle);
                 return;
             }
@@ -89,7 +89,7 @@ namespace SpartaTextRPG.Managers
         {
             if (Hero == null)
             {
-                TextManager.ErrorWriteLine("플레이어 정보가 없습니다.");
+                TextManager.HWriteLine("플레이어 정보가 없습니다.");
                 return;
             }
 
@@ -100,7 +100,7 @@ namespace SpartaTextRPG.Managers
         {
             EnterdMap = map;
             // TODO: 전투 시작
-            TextManager.SystemWriteLine("몬스터와 조우 했습니다.");
+            TextManager.LWriteLine("몬스터와 조우 했습니다.");
             TextManager.WriteBattleStart();
 
             // 몬스터를 생성
@@ -121,7 +121,7 @@ namespace SpartaTextRPG.Managers
         public void SaveRecallPoint(Defines.MapType mapType)
         {
             SavedRecallPoint = mapType;
-            TextManager.SystemWriteLine("귀환지를 저장하였습니다.");
+            TextManager.LWriteLine("귀환지를 저장하였습니다.");
         }
         public void Recall()
         {
@@ -136,7 +136,7 @@ namespace SpartaTextRPG.Managers
                 + "더이 상 진행하지 않고 게임을 종료하시겠습니까?", () =>
             {
                 EnterdMap = null;
-                TextManager.SystemWriteLine("타이틀 화면으로 돌아갑니다.");
+                TextManager.LWriteLine("타이틀 화면으로 돌아갑니다.");
                 JobManager.Instance.Push(UIManager.Instance.GameTitle);
             });
         }
@@ -145,7 +145,7 @@ namespace SpartaTextRPG.Managers
             TextManager.Confirm("정말로 종료하시겠습니까?", () =>
             {
                 EnterdMap = null;
-                TextManager.SystemWriteLine("타이틀 화면으로 돌아갑니다.");
+                TextManager.LWriteLine("타이틀 화면으로 돌아갑니다.");
                 JobManager.Instance.Push(UIManager.Instance.GameTitle);
             });
         }

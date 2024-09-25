@@ -49,7 +49,7 @@ namespace SpartaTextRPG.Managers
         {
             TextManager.Confirm("정말로 종료하시겠습니까?", () =>
             {
-                TextManager.SystemWriteLine("게임을 종료합니다.");
+                TextManager.LWriteLine("게임을 종료합니다.");
                 JobManager.Instance.Exit();
             },
             () =>
@@ -60,7 +60,7 @@ namespace SpartaTextRPG.Managers
 
         public void ShowGameSave(CreatureBase owner)
         {
-            TextManager.SystemWriteLine($"{owner.Name}님의 게임을 저장할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}님의 게임을 저장할 수 있습니다.");
             JobManager.Instance.Push(() => ShowGameSaveJob(owner));
         }
         public void ShowGameSaveJob(CreatureBase owner)
@@ -77,7 +77,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowPlayerMenuJob(CreatureBase owner)
         {
-            TextManager.SystemWriteLine($"{owner.Name}님의 정보를 확인할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}님의 정보를 확인할 수 있습니다.");
             PlayerMenuUI playerMenuUI = new PlayerMenuUI(owner);
             playerMenuUI.Show();
         }
@@ -88,7 +88,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowPlayerStatusJob(CreatureBase owner)
         {
-            TextManager.SystemWriteLine($"{owner.Name}님의 상태를 확인할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}님의 상태를 확인할 수 있습니다.");
             PlayerStatusUI statusUI = new PlayerStatusUI(owner);
             statusUI.Show();
         }
@@ -99,7 +99,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowPlayerInventoryJob(CreatureBase owner)
         {
-            TextManager.SystemWriteLine($"{owner.Name}님의 인벤토리를 확인할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}님의 인벤토리를 확인할 수 있습니다.");
             PlayerInventoryUI inventoryUI = new PlayerInventoryUI(owner);
             inventoryUI.Show();
         }
@@ -110,7 +110,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowPlayerSkillJob(CreatureBase owner)
         {
-            TextManager.SystemWriteLine($"{owner.Name}님의 스킬을 확인할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}님의 스킬을 확인할 수 있습니다.");
             PlayerSkillUI skillUI = new PlayerSkillUI(owner);
             skillUI.Show();
         }
@@ -121,7 +121,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowPlayerQuestJob(CreatureBase owner)
         {
-            TextManager.SystemWriteLine($"{owner.Name}님의 퀘스트를 확인할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}님의 퀘스트를 확인할 수 있습니다.");
             PlayerQuestUI questUI = new PlayerQuestUI(owner);
             questUI.Show();
         }
@@ -135,7 +135,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowShopVisitJob(CreatureBase owner, CreatureBase visitor)
         {
-            TextManager.SystemWriteLine($"{owner.Name}에게 방문합니다.");
+            TextManager.LWriteLine($"{owner.Name}에게 방문합니다.");
             ShopVisitUI itemShopUI = new ShopVisitUI(owner);
             itemShopUI.Show(visitor);
         }
@@ -146,7 +146,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowShopBuyJob(CreatureBase owner, CreatureBase visitor)
         {
-            TextManager.SystemWriteLine($"{owner.Name}에게 아이템을 구매할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}에게 아이템을 구매할 수 있습니다.");
             ShopBuyUI shopBuyUI = new ShopBuyUI(owner);
             shopBuyUI.Show(visitor);
         }
@@ -157,7 +157,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowShopSellJob(CreatureBase owner, CreatureBase visitor)
         {
-            TextManager.SystemWriteLine($"{owner.Name}에게 아이템을 판매할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}에게 아이템을 판매할 수 있습니다.");
             ShopSellUI shopSellUI = new ShopSellUI(owner);
             shopSellUI.Show(visitor);
         }
@@ -168,7 +168,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowShopInnJob(CreatureBase owner, CreatureBase visitor)
         {
-            TextManager.SystemWriteLine($"{owner.Name}에게 숙박할 수 있습니다.");
+            TextManager.LWriteLine($"{owner.Name}에게 숙박할 수 있습니다.");
             ShopInnUI shopInnUI = new ShopInnUI(owner);
             shopInnUI.Show(visitor);
         }
@@ -181,7 +181,7 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowBattleStartJob(CreatureBase owner, Monster[] monsters)
         {
-            TextManager.SystemWriteLine($"{monsters[0].Name} 외 {monsters.Length - 1} 몬스터와 전투를 시작합니다.");
+            TextManager.LWriteLine($"{monsters[0].Name} 외 {monsters.Length - 1} 몬스터와 전투를 시작합니다.");
             BattleMenuUI battleUI = new BattleMenuUI(owner);
             battleUI.SetMonsters(monsters);
             battleUI.Show();

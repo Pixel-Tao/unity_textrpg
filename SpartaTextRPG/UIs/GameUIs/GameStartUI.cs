@@ -12,8 +12,8 @@ namespace SpartaTextRPG.UIs.GameUIs
 
         public override void Show(CreatureBase? visitor = null)
         {
-            TextManager.SystemWriteLine("새로운 캐릭터를 생성합니다.");
-            TextManager.SystemWriteLine("안내에 따라 키를 입력해 주세요.");
+            TextManager.LWriteLine("새로운 캐릭터를 생성합니다.");
+            TextManager.LWriteLine("안내에 따라 키를 입력해 주세요.");
 
             TextManager.Flush();
             TextManager.InfoWriteLine("캐릭터의 이름을 입력해 주세요.");
@@ -25,9 +25,9 @@ namespace SpartaTextRPG.UIs.GameUIs
                 if (!string.IsNullOrWhiteSpace(name))
                     break;
 
-                TextManager.SystemWriteLine("잘못된 이름입니다. 다시 입력해 주세요.");
+                TextManager.LWriteLine("잘못된 이름입니다. 다시 입력해 주세요.");
             } while (true);
-            TextManager.SystemWriteLine($"이름 : {name}");
+            TextManager.LWriteLine($"이름 : {name}");
 
             Defines.JobType[] heroTypes = [
                 Defines.JobType.Warrior,
@@ -58,12 +58,12 @@ namespace SpartaTextRPG.UIs.GameUIs
             }
 
             TextManager.Flush();
-            TextManager.SystemWriteLine($"직업 : {data.Name}");
-            TextManager.SystemWriteLine("월드 진입을 기다리는 중...");
+            TextManager.LWriteLine($"직업 : {data.Name}");
+            TextManager.LWriteLine("월드 진입을 기다리는 중...");
             Thread.Sleep(500);
-            TextManager.SystemWriteLine("캐릭터 생성이 완료되었습니다.");
+            TextManager.LWriteLine("캐릭터 생성이 완료되었습니다.");
             Thread.Sleep(500);
-            TextManager.SystemWriteLine("게임을 즐겨주세요!");
+            TextManager.LWriteLine("게임을 즐겨주세요!");
 
             // 캐릭터 생성
             GameManager.Instance.CreateHero(name, heroTypes[selectedHeroIndex]);

@@ -45,13 +45,13 @@ namespace SpartaTextRPG.UIs.BattleUIs
             Hero hero = Owner as Hero;
             if (hero == null)
             {
-                TextManager.ErrorWriteLine("참조 가능한 플레이어 정보가 없습니다.");
+                TextManager.HWriteLine("참조 가능한 플레이어 정보가 없습니다.");
                 GameManager.Instance.WakeUpWorld();
                 return;
             }
             if (Monsters.Length == 0)
             {
-                TextManager.ErrorWriteLine("몬스터가 존재하지 않습니다. 월드로 이동합니다.");
+                TextManager.HWriteLine("몬스터가 존재하지 않습니다. 월드로 이동합니다.");
                 GameManager.Instance.WakeUpWorld();
                 return;
             }
@@ -87,7 +87,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
                         Monster? monster = turns.Dequeue() as Monster;
                         if (turnChangeFlag)
                         {
-                            TextManager.WarningWriteLine($"{monster?.Name}의 턴입니다.");
+                            TextManager.MWriteLine($"몬스터 {monster?.Name}의 턴입니다.");
                             turnChangeFlag = false;
                         }
                         MonsterAction(monster);
@@ -105,7 +105,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
                     if (hero.IsDead)
                     {
                         TextManager.Flush();
-                        TextManager.SystemWriteLine("플레이어가 사망하여 귀환지로 이동합니다.");
+                        TextManager.LWriteLine("플레이어가 사망하여 귀환지로 이동합니다.");
                         Thread.Sleep(1000);
                         GameManager.Instance.Recall();
                         hero.Rest();
@@ -114,7 +114,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
 
                     if (turnChangeFlag)
                     {
-                        TextManager.WarningWriteLine($"{hero.Name}의 턴입니다.");
+                        TextManager.MWriteLine($"플레이어 {hero.Name}님의 턴입니다.");
                         turnChangeFlag = false;
                     }
                     // 플레이어 턴
@@ -132,13 +132,13 @@ namespace SpartaTextRPG.UIs.BattleUIs
                         {
                             if (isBossBattle)
                             {
-                                TextManager.WarningWriteLine("보스의 강력한 힘으로 도망칠 수 없습니다.");
+                                TextManager.MWriteLine("보스의 강력한 힘으로 도망칠 수 없습니다.");
                                 continue;
                             }
 
                             if (random.Next(0, 100) > Defines.BATTLE_ESCAPE_RATE)
                             {
-                                TextManager.WarningWriteLine("전투에서 도망치지 못했습니다. 턴이 넘어갑니다.");
+                                TextManager.MWriteLine("전투에서 도망치지 못했습니다. 턴이 넘어갑니다.");
                                 TurnChange(turns.Dequeue());
                                 monsterSelectMode = false;
                                 Thread.Sleep(1000);
@@ -146,7 +146,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
                             }
 
                             // 도망 성공
-                            TextManager.SystemWriteLine("전투에서 도망쳤습니다.");
+                            TextManager.LWriteLine("전투에서 도망쳤습니다.");
                             Thread.Sleep(1000);
                             GameManager.Instance.WakeUpWorld();
                             return;
@@ -226,13 +226,27 @@ namespace SpartaTextRPG.UIs.BattleUIs
                 Monster monster = Monsters[monsterSelectedIndex];
                 if (monster.IsDead)
                 {
-                    TextManager.SystemWriteLine("이미 죽은 몬스터는 공격할 수 없습니다.");
+                    TextManager.LWriteLine("이미 죽은 몬스터는 공격할 수 없습니다.");
                     return;
                 }
 
                 int attackCount = hero.IsDoubleAttack() ? 2 : 1;
+                Skill? skill = null;
                 for (int i = 0; i < attackCount; i++)
                 {
+                    if (i > 0)
+                    {
+                        if (Monsters.All(x => x.IsDead))
+                            break;
+
+                        if (monster.IsDead)
+                        {
+                            monsterSelectedIndex = (monsterSelectedIndex - 1 + Monsters.Length) % Monsters.Length;
+                            monster = Monsters[monsterSelectedIndex];
+                        }
+
+                        TextManager.LWriteLine($"{hero.Name}님이 추가 공격을 가합니다!");
+                    }
                     // 공격
                     switch (Menus[selectedMenuIndex])
                     {
@@ -243,31 +257,35 @@ namespace SpartaTextRPG.UIs.BattleUIs
                             break;
                         case Defines.MenuType.BattleSkill:
                             // 스킬 실행
-                            Skill? skill = hero.SkillBook.GetSkill(skillDataId);
+                            skill = hero.SkillBook.GetSkill(skillDataId);
                             if (skill == null)
                             {
-                                TextManager.WarningWriteLine("스킬을 찾을 수 없습니다.");
+                                TextManager.MWriteLine("스킬을 찾을 수 없습니다.");
                                 return;
                             }
 
                             for (int combo = 0; combo < skill.ComboCount; combo++)
                             {
+
                                 if (skill.SkillType == Defines.SkillType.Attack)
-                                    hero.SkillBook.UseSkill(skillDataId, [monster]);
+                                    skill.Use([monster]);
                                 else if (skill.SkillType == Defines.SkillType.AOE)
                                 {
                                     // 광역 스킬이면 대상을 가져옴
                                     Monster[] targets = GetTargetMonsters(monsterSelectedIndex, skill.TargetCount);
-                                    hero.SkillBook.UseSkill(skillDataId, targets);
+                                    skill.Use(targets);
                                 }
                             }
                             Thread.Sleep(500);
                             break;
                         default:
-                            TextManager.SystemWriteLine("아무런 행위도 하지 못했습니다.");
+                            TextManager.LWriteLine("아무런 행위도 하지 못했습니다.");
                             break;
                     }
                 }
+
+                if (Menus[selectedMenuIndex] == Defines.MenuType.BattleSkill)
+                    skill?.RemoveCount();
 
                 TurnChange(turns.Dequeue());
                 monsterSelectMode = false;
@@ -312,7 +330,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
 
                         if (item.ItemType != Defines.ItemType.Consumable)
                         {
-                            TextManager.WarningWriteLine("전투중에 사용할 수 없는 아이템입니다.");
+                            TextManager.MWriteLine("전투중에 사용할 수 없는 아이템입니다.");
                             return;
                         }
 
@@ -330,57 +348,70 @@ namespace SpartaTextRPG.UIs.BattleUIs
             Thread.Sleep(1000);
             Defines.MenuType[] values = [
                 Defines.MenuType.BattleAttack,
-                Defines.MenuType.BattleAttack,
-                Defines.MenuType.BattleAttack,
-                Defines.MenuType.BattleAttack,
-                Defines.MenuType.BattleAttack,
-                Defines.MenuType.BattleSkill,
-                Defines.MenuType.BattleSkill,
+                //Defines.MenuType.BattleAttack,
+                //Defines.MenuType.BattleAttack,
+                //Defines.MenuType.BattleAttack,
+                //Defines.MenuType.BattleAttack,
+                //Defines.MenuType.BattleSkill,
+                //Defines.MenuType.BattleSkill,
                 Defines.MenuType.BattleItem
             ];
-            do
+            Defines.MenuType monsterActionType;
+            while (true)
             {
-                Defines.MenuType monsterActionType = values[random.Next(values.Length)];
-                Hero hero = Owner as Hero;
-                if (hero == null)
+                monsterActionType = values[random.Next(values.Length)];
+
+                if (monsterActionType == Defines.MenuType.BattleSkill && monster.SkillBook.Skills.Count == 0)
+                    continue;
+                if (monsterActionType == Defines.MenuType.BattleItem && monster.Inventory.IsEmpty())
+                    continue;
+
+                break;
+            }
+
+            if (monsterActionType == Defines.MenuType.BattleItem)
+            {
+                // 아이템
+                ConsumableItem[] cItems = monster.Inventory.GetItems<ConsumableItem>();
+                ConsumableItem cItem = cItems[random.Next(cItems.Length)];
+                if (cItem != null) monster.Consume(cItem);
+                return;
+            }
+
+            Hero hero = Owner as Hero;
+            if (hero == null)
+            {
+                TextManager.HWriteLine("Hero is null");
+                return;
+            }
+
+            int attackCount = monster.IsDoubleAttack() ? 2 : 1;
+            Skill? skill = null;
+            for (int i = 0; i < attackCount; i++)
+            {
+                if (i > 0)
                 {
-                    TextManager.ErrorWriteLine("Hero is null");
-                    return;
+                    if (hero.IsDead) break;
+                    TextManager.LWriteLine($"{monster.Name}이(가) 추가 공격을 가합니다.");
                 }
-
-                int attackCount = monster.IsDoubleAttack() ? 2 : 1;
-
-                for (int i = 0; i < attackCount; i++)
+                switch (monsterActionType)
                 {
-                    switch (monsterActionType)
-                    {
-                        case Defines.MenuType.BattleAttack:
-                            // 공격
-                            hero.OnDamaged(monster.Attack, monster);
-                            return;
-                        case Defines.MenuType.BattleSkill:
-                            // 스킬
-                            if (monster.SkillBook.Skills.Count == 0)
-                                continue;
-
-                            int skillIndex = random.Next(monster.SkillBook.Skills.Count);
-                            Skill skill = monster.SkillBook.Skills[skillIndex];
-                            for (int combo = 0; combo < skill.ComboCount; combo++)
-                                monster.SkillBook.UseSkill(skill, [hero]);
-                            break;
-                        case Defines.MenuType.BattleItem:
-                            // 아이템
-                            ConsumableItem[] cItems = monster.Inventory.Items.Where(s => s?.ItemType == Defines.ItemType.Consumable).Select(s => s.CastItem<ConsumableItem>()).ToArray();
-                            if (cItems.Length == 0)
-                                continue;
-
-                            ConsumableItem cItem = cItems[random.Next(cItems.Length)];
-                            cItem.RemoveItem();
-                            break;
-                    }
+                    case Defines.MenuType.BattleAttack:
+                        // 공격
+                        hero.OnDamaged(monster.Attack, monster);
+                        break;
+                    case Defines.MenuType.BattleSkill:
+                        // 스킬
+                        int skillIndex = random.Next(monster.SkillBook.Skills.Count);
+                        skill = monster.SkillBook.Skills[skillIndex];
+                        for (int combo = 0; combo < skill.ComboCount; combo++)
+                            monster.SkillBook.UseSkill(skill, [hero]);
+                        break;
                 }
+            }
 
-            } while (true);
+            if (monsterActionType == Defines.MenuType.BattleSkill)
+                skill?.RemoveCount();
         }
 
         // 공격순서 정렬 -> Queue 에 저장
@@ -495,12 +526,19 @@ namespace SpartaTextRPG.UIs.BattleUIs
 
         private void InitMonster()
         {
-            Monster? boss = Monsters.FirstOrDefault(s => s.IsDead == true && Defines.LAST_BOSS_ID == s.MonsterDataId);
+            Monster? boss = null;
+            for (int i = 0; i < Monsters.Length; i++)
+            {
+                if (Defines.LAST_BOSS_ID == Monsters[i].MonsterDataId)
+                    boss = Monsters[i];
+
+                TextManager.LWriteLine($"{Monsters[i].Name} 등장! ({Monsters[i].Description})");
+            }
             if (boss == null) return;
             isBossBattle = true;
             for (int i = 0; i < boss.Messages.Length; i++)
             {
-                TextManager.WarningWriteLine(boss.Messages[i]);
+                TextManager.MWriteLine(boss.Messages[i]);
                 Thread.Sleep(1000);
             }
         }
@@ -514,18 +552,18 @@ namespace SpartaTextRPG.UIs.BattleUIs
             hero.BuffClear();
             if (IsGameEnd())
             {
-                TextManager.ErrorWriteLine("최종 보스를 처치했습니다.");
+                TextManager.HWriteLine("최종 보스를 처치했습니다.");
                 Thread.Sleep(1000);
-                TextManager.ErrorWriteLine("엔딩크레딧이 올라갑니다.");
+                TextManager.HWriteLine("엔딩크레딧이 올라갑니다.");
                 Thread.Sleep(2000);
-                TextManager.ErrorWriteLine("수고하셨습니다.");
+                TextManager.HWriteLine("수고하셨습니다.");
                 Thread.Sleep(2000);
                 TextManager.EndingCredit();
                 GameManager.Instance.GameEnd();
             }
             else
             {
-                TextManager.SystemWriteLine("모든 몬스터를 처치하였습니다.");
+                TextManager.LWriteLine("모든 몬스터를 처치하였습니다.");
                 Thread.Sleep(1000);
                 GameManager.Instance.WakeUpWorld();
             }

@@ -44,12 +44,12 @@ namespace SpartaTextRPG.UIs.ShopUIs
                         case Defines.MenuType.Rest:
                             if (visitor.Inventory?.Gold < 200)
                             {
-                                TextManager.SystemWriteLine("골드가 부족합니다.");
+                                TextManager.LWriteLine("골드가 부족합니다.");
                             }
                             TextManager.Confirm("200G를 지불하고 휴식을 취하시겠습니까?", () =>
                             {
                                 visitor.Rest();
-                                TextManager.SystemWriteLine($"{visitor.Name}님이 여관에서 휴식을 취했습니다.");
+                                TextManager.LWriteLine($"{visitor.Name}님이 여관에서 휴식을 취했습니다.");
                             });
                             break;
                         case Defines.MenuType.Exit:
@@ -81,7 +81,7 @@ namespace SpartaTextRPG.UIs.ShopUIs
 
         private void Cheat(CreatureBase visitor)
         {
-            TextManager.ErrorWriteLine("***** 르탄이의 축복이 활성화 되었습니다. *****");
+            TextManager.HWriteLine("***** 르탄이가 축복을 내립니다. *****");
             visitor.SetLevel(Defines.CREATURE_MAX_LEVEL);
             visitor.SetDefaultStat(9999, 999, 200, 200);
             visitor.OnHealed(visitor.MaxHp);
@@ -90,7 +90,8 @@ namespace SpartaTextRPG.UIs.ShopUIs
             if (visitor.Inventory?.Gold < 1000000)
                 visitor.Inventory?.AddGold(1000000);
             DataManager.Instance.LoadAllItems();
-            TextManager.ErrorWriteLine("이 일로 무슨일이 벌어져도 저는 아무런 책임지지 않겠습니다.");
+            GameManager.Instance.EnterdMap?.LoadNpc();
+            TextManager.HWriteLine("이 일로 저는 무슨일이 벌어져도 아무런 책임지지 않겠습니다.");
         }
     }
 }

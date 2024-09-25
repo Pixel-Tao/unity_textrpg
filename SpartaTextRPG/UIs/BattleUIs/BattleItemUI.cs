@@ -43,12 +43,12 @@ namespace SpartaTextRPG.UIs.BattleUIs
                             ItemBase? item = GetSelectedItem(Owner.Inventory.Items);
                             if (item == null)
                             {
-                                TextManager.WarningWriteLine("아이템을 선택해주세요.");
+                                TextManager.MWriteLine("아이템을 선택해주세요.");
                                 continue;
                             }
                             if (item.ItemType != Defines.ItemType.Consumable)
                             {
-                                TextManager.WarningWriteLine("전투중에 사용할 수 없는 아이템입니다.");
+                                TextManager.MWriteLine("전투중에 사용할 수 없는 아이템입니다.");
                                 continue;
                             }
                             // selectedItemIndex 는 SelectMenu 함수에서 선택 했으므로 그냥 return 하면 됨. 

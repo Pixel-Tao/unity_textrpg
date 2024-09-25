@@ -31,7 +31,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
             Hero hero = Owner as Hero;
             if (hero == null)
             {
-                TextManager.ErrorWriteLine("Hero is null");
+                TextManager.HWriteLine("Hero is null");
                 return;
             }
 
@@ -53,7 +53,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                             // 아이템 사용/장착
                             if (item == null)
                             {
-                                TextManager.WarningWriteLine("아이템이 없습니다.");
+                                TextManager.MWriteLine("아이템이 없습니다.");
                                 continue;
                             }
                             if (item.ItemType == Defines.ItemType.Consumable)
@@ -80,14 +80,14 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                             // 아이템 버리기
                             if (item == null)
                             {
-                                TextManager.WarningWriteLine("아이템이 없습니다.");
+                                TextManager.MWriteLine("아이템이 없습니다.");
                                 continue;
                             }
                             TextManager.Confirm("아이템을 버리시겠습니까?", () =>
                             {
                                 if (item.ItemType == Defines.ItemType.Equipment && item.CastItem<EquipmentItem>().IsEquipped)
                                 {
-                                    TextManager.WarningWriteLine("장착중인 아이템은 버릴 수 없습니다.");
+                                    TextManager.MWriteLine("장착중인 아이템은 버릴 수 없습니다.");
                                     return;
                                 }
                                 hero.Inventory.RemoveItem(item);

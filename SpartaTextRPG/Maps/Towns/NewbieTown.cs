@@ -45,12 +45,8 @@ namespace SpartaTextRPG.Maps
         {
             MapTile[] maps = GenerateMap(MapData);
             MapTiles = maps;
-            Npcs = new Npc[NpcIds.Length];
-            for (int i = 0; i < NpcIds.Length; i++)
-            {
-                NpcData data = DataManager.Instance.NpcDict[NpcIds[i]];
-                Npcs[i] = new Npc(data);
-            }
+
+            LoadNpc();
         }
 
         public override void Leave(Defines.TileType exitType)
@@ -113,7 +109,7 @@ namespace SpartaTextRPG.Maps
                     Npc? npc = Npcs.FirstOrDefault(x => x.TileType == prevTile.TileType);
                     if (npc == null)
                     {
-                        TextManager.ErrorWriteLine("NPC를 찾을 수 없습니다.");
+                        TextManager.HWriteLine("NPC를 찾을 수 없습니다.");
                         continue;
                     }
 
@@ -134,7 +130,7 @@ namespace SpartaTextRPG.Maps
                 MapTile? tile = MapTiles.FirstOrDefault(v => v.Position.Compare(nextPos));
                 if (tile == null)
                 {
-                    TextManager.ErrorWriteLine("잘못된 이동입니다.");
+                    TextManager.HWriteLine("잘못된 이동입니다.");
                     continue;
                 }
                 else if (tile.Value.CanMoveToTile())

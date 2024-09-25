@@ -21,7 +21,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
             Hero hero = Owner as Hero;
             if (hero == null)
             {
-                TextManager.ErrorWriteLine("Hero is null");
+                TextManager.HWriteLine("Hero is null");
                 return;
             }
 

@@ -24,7 +24,7 @@ namespace SpartaTextRPG.Creatures
             // Level 데이터 + 기본 능력치
             if (GameManager.Instance.Hero == null)
             {
-                TextManager.ErrorWriteLine("참조 가능한 플레이어 정보가 없습니다.");
+                TextManager.HWriteLine("참조 가능한 플레이어 정보가 없습니다.");
                 return;
             }
 
@@ -54,23 +54,23 @@ namespace SpartaTextRPG.Creatures
             base.OnDamaged(damage, attacker);
 
             if (attacker == null)
-                TextManager.SystemWriteLine($"{Name}이(가) {damage}의 피해를 입었습니다.");
+                TextManager.LWriteLine($"{Name}이(가) {damage}의 피해를 입었습니다.");
             else
-                TextManager.SystemWriteLine($"{Name}이(가) {attacker.Name}에게 {damage}의 피해를 입었습니다.");
+                TextManager.LWriteLine($"{Name}이(가) {attacker.Name}에게 {damage}의 피해를 입었습니다.");
         }
 
         public override void OnHealed(int heal, CreatureBase? healer = null)
         {
             base.OnHealed(heal, healer);
             if (healer == null)
-                TextManager.SystemWriteLine($"{Name}이(가) {heal}만큼 회복되었습니다.");
+                TextManager.LWriteLine($"{Name}이(가) {heal}만큼 회복되었습니다.");
             else
-                TextManager.SystemWriteLine($"{Name}이(가) {healer.Name}에게 {heal}만큼 회복되었습니다.");
+                TextManager.LWriteLine($"{Name}이(가) {healer.Name}에게 {heal}만큼 회복되었습니다.");
         }
 
         public override void OnDead()
         {
-            TextManager.SystemWriteLine($"{Name}이(가) 사망하였습니다.");
+            TextManager.LWriteLine($"{Name}이(가) 사망하였습니다.");
         }
     }
 }

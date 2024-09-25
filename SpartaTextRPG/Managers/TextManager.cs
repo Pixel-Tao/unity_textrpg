@@ -12,9 +12,9 @@ namespace SpartaTextRPG.Managers
     {
         enum SystemConsoleType
         {
-            Error,
-            System,
-            Warning
+            LowLevel,
+            MiddleLevel,
+            HighLevel,
         }
 
         class SystemMessage
@@ -41,7 +41,7 @@ namespace SpartaTextRPG.Managers
                 _maxQueueCount = _defaultLineCount;
                 SystemMessage msg = new SystemMessage();
                 msg.Message = "";
-                msg.Type = SystemConsoleType.System;
+                msg.Type = SystemConsoleType.LowLevel;
                 msg.Time = DateTime.Now;
                 for (int i = 0; i < _maxQueueCount; i++)
                 {
@@ -52,7 +52,7 @@ namespace SpartaTextRPG.Managers
                 for (int i = 0; i < _maxGuideLineCount; i++)
                     Console.WriteLine(new string('-', Console.WindowWidth));
 
-                CurrentSite(Defines.MapType.None, "");
+                CurrentSite(Defines.MapType.None, Defines.MapType.None, "");
             }
         }
 
@@ -330,10 +330,10 @@ namespace SpartaTextRPG.Managers
             _writeLineCount = 0;
         }
 
-        public static void ErrorWriteLine(string format, params object?[]? arg)
+        public static void LWriteLine(string format, params object?[]? arg)
         {
             SystemMessage message = new SystemMessage();
-            message.Type = SystemConsoleType.Error;
+            message.Type = SystemConsoleType.LowLevel;
             message.Message = string.Format(format, arg);
             message.Time = DateTime.Now;
 
@@ -344,10 +344,10 @@ namespace SpartaTextRPG.Managers
 
             QueueWriteLine();
         }
-        public static void SystemWriteLine(string format, params object?[]? arg)
+        public static void MWriteLine(string format, params object?[]? arg)
         {
             SystemMessage message = new SystemMessage();
-            message.Type = SystemConsoleType.System;
+            message.Type = SystemConsoleType.MiddleLevel;
             message.Message = string.Format(format, arg);
             message.Time = DateTime.Now;
 
@@ -358,10 +358,10 @@ namespace SpartaTextRPG.Managers
 
             QueueWriteLine();
         }
-        public static void WarningWriteLine(string format, params object?[]? arg)
+        public static void HWriteLine(string format, params object?[]? arg)
         {
             SystemMessage message = new SystemMessage();
-            message.Type = SystemConsoleType.Warning;
+            message.Type = SystemConsoleType.HighLevel;
             message.Message = string.Format(format, arg);
             message.Time = DateTime.Now;
 
@@ -373,7 +373,7 @@ namespace SpartaTextRPG.Managers
             QueueWriteLine();
         }
 
-        public static void CurrentSite(Defines.MapType mapType, string name, string desc = "")
+        public static void CurrentSite(Defines.MapType mapType, Defines.MapType recallType, string name, string desc = "")
         {
             int currentTop = Console.CursorTop;
             int currentLeft = Console.CursorLeft;
@@ -383,9 +383,10 @@ namespace SpartaTextRPG.Managers
             Console.SetCursorPosition(0, _maxQueueCount + _maxGuideLineCount);
             Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, _maxQueueCount + _maxGuideLineCount);
-            string text = $"현재 위치 : [{Util.MapTypeToString(mapType)}] {name}";
+            string text = $"현재 위치 : {Util.MapTypeToString(mapType)}";
             if (!string.IsNullOrWhiteSpace(desc))
                 text += $" ({desc})";
+            text += $" | 귀환지 : {Util.MapTypeToString(recallType)}";
             Console.WriteLine(text);
             Console.ResetColor();
             Console.WriteLine(new string('=', Console.WindowWidth));
@@ -406,15 +407,15 @@ namespace SpartaTextRPG.Managers
 
                 switch (message.Type)
                 {
-                    case SystemConsoleType.Error:
+                    case SystemConsoleType.HighLevel:
                         Console.BackgroundColor = ConsoleColor.Red;
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
-                    case SystemConsoleType.System:
+                    case SystemConsoleType.LowLevel:
                         Console.BackgroundColor = ConsoleColor.Gray;
                         Console.ForegroundColor = ConsoleColor.Black;
                         break;
-                    case SystemConsoleType.Warning:
+                    case SystemConsoleType.MiddleLevel:
                         Console.BackgroundColor = ConsoleColor.Yellow;
                         Console.ForegroundColor = ConsoleColor.Black;
                         break;
@@ -557,7 +558,7 @@ namespace SpartaTextRPG.Managers
             _messageQueue.Clear();
             SystemMessage msg = new SystemMessage();
             msg.Message = "";
-            msg.Type = SystemConsoleType.System;
+            msg.Type = SystemConsoleType.LowLevel;
             msg.Time = DateTime.Now;
             for (int i = 0; i < _maxQueueCount; i++)
             {
@@ -577,33 +578,33 @@ namespace SpartaTextRPG.Managers
                 for (int i = 0; i < count; i++)
                 {
                     Thread.Sleep(500);
-                    SystemWriteLine("");
+                    LWriteLine("");
                 }
             }
 
-            SystemWriteLine("이세계 텍스트 RPG");
+            LWriteLine("이세계 텍스트 RPG");
             emptyLine(2);
-            SystemWriteLine("제작 : 인생한방이조(7조) 김태호");
+            LWriteLine("제작 : 인생한방이조(7조) 김태호");
             emptyLine(2);
-            SystemWriteLine("기    획 : 김태호");
+            LWriteLine("기    획 : 김태호");
             emptyLine(2);
-            SystemWriteLine("각    본 : 김태호");
+            LWriteLine("각    본 : 김태호");
             emptyLine(2);
-            SystemWriteLine("연    출 : 김태호");
+            LWriteLine("연    출 : 김태호");
             emptyLine(2);
-            SystemWriteLine("개    발 : 김태호");
+            LWriteLine("개    발 : 김태호");
             emptyLine(2);
-            SystemWriteLine("리 소 스 : 김태호");
+            LWriteLine("리 소 스 : 김태호");
             emptyLine(2);
-            SystemWriteLine("고    생 : 김태호");
+            LWriteLine("고    생 : 김태호");
             emptyLine(2);
-            SystemWriteLine("특별출연 : 르탄이");
+            LWriteLine("특별출연 : 르탄이");
             emptyLine(2);
-            SystemWriteLine("지    원 : 스파르타코딩클럽 내일배움캠프");
+            LWriteLine("지    원 : 스파르타코딩클럽 내일배움캠프");
             emptyLine(2);
-            SystemWriteLine("한 마 디 : 플레이 해주셔서 베리 땡큐 감사!");
+            LWriteLine("한 마 디 : 플레이 해주셔서 베리 땡큐 감사!");
             emptyLine(5);
-            SystemWriteLine($"{Defines.ACCEPT_KEY} 키를 누르면 다음으로 넘어갑니다.");
+            LWriteLine($"{Defines.ACCEPT_KEY} 키를 누르면 다음으로 넘어갑니다.");
 
             while (Console.ReadKey().Key != Defines.ACCEPT_KEY)
             {

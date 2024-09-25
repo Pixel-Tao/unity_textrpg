@@ -55,12 +55,12 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                             {
                                 if (GameManager.Instance.Hero == null)
                                 {
-                                    TextManager.ErrorWriteLine("참조 가능한 플레이어 정보가 없습니다.");
+                                    TextManager.HWriteLine("참조 가능한 플레이어 정보가 없습니다.");
                                     break;
                                 }
                                 if (GameManager.Instance.Hero.CurrentMapType == GameManager.Instance.SavedRecallPoint)
                                 {
-                                    TextManager.SystemWriteLine("이미 마을에 있습니다.");
+                                    TextManager.LWriteLine("이미 마을에 있습니다.");
                                     break;
                                 }
 
@@ -69,11 +69,11 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                                     case Defines.MapType.CaveDungeon:
                                     case Defines.MapType.RuinDungeon:
                                     case Defines.MapType.TowerDungeon:
-                                        TextManager.SystemWriteLine("던전에서는 귀환을 할 수 없습니다.");
+                                        TextManager.LWriteLine("던전에서는 귀환을 할 수 없습니다.");
                                         break;
                                     default:
                                         TextManager.Flush();
-                                        TextManager.SystemWriteLine($"{Util.MapTypeToString(GameManager.Instance.SavedRecallPoint)}(으)로 이동합니다.");
+                                        TextManager.LWriteLine($"{Util.MapTypeToString(GameManager.Instance.SavedRecallPoint)}(으)로 이동합니다.");
                                         GameManager.Instance.Recall();
                                         return;
                                 }

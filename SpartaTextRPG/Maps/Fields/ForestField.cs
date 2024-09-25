@@ -57,7 +57,7 @@ namespace SpartaTextRPG.Maps
                     GameManager.Instance.EnterWorld<NewbieTown>(Defines.TileType.Enter1);
                     break;
                 case Defines.TileType.Exit2:
-                    TextManager.SystemWriteLine("다음 마을은 구현되지 않았습니다.");
+                    TextManager.LWriteLine("다음 마을은 구현되지 않았습니다.");
                     GameManager.Instance.EnterWorld<NewbieTown>(Defines.TileType.Enter1);
                     break;
                 case Defines.TileType.Exit3:
@@ -117,7 +117,7 @@ namespace SpartaTextRPG.Maps
                 MapTile? tile = MapTiles.FirstOrDefault(v => v.Position.Compare(nextPos));
                 if (tile == null)
                 {
-                    TextManager.ErrorWriteLine("잘못된 이동입니다.");
+                    TextManager.HWriteLine("잘못된 이동입니다.");
                     continue;
                 }
                 else if (tile.Value.CanMoveToTile())

@@ -27,7 +27,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
             Hero hero = Owner as Hero;
             if (hero == null)
             {
-                TextManager.ErrorWriteLine("Hero is null");
+                TextManager.HWriteLine("Hero is null");
                 return;
             }
 
@@ -49,7 +49,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                             // 스킬 사용
                             if (skill == null)
                             {
-                                TextManager.WarningWriteLine("스킬이 없습니다.");
+                                TextManager.MWriteLine("스킬이 없습니다.");
                                 continue;
                             }
                             if (skill.SkillType == Defines.SkillType.Attack
@@ -63,6 +63,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                             {
                                 TextManager.InfoWriteLine($"{hero.Name}님이 {skill.Name}을 사용했습니다.");
                                 skill.Use([hero]);
+                                skill.RemoveCount();
                             });
                             break;
                         case Defines.MenuType.Back:

@@ -29,7 +29,7 @@ namespace SpartaTextRPG.Managers
             Hero hero = GameManager.Instance.Hero;
             if (hero == null)
             {
-                TextManager.SystemWriteLine("저장 가능한 캐릭터가 없습니다.");
+                TextManager.LWriteLine("저장 가능한 캐릭터가 없습니다.");
                 return;
             }
 

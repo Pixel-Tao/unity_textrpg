@@ -1,4 +1,5 @@
 using SpartaTextRPG.Creatures;
+using SpartaTextRPG.Datas;
 using SpartaTextRPG.Managers;
 using SpartaTextRPG.Utils;
 using System;
@@ -40,19 +41,28 @@ namespace SpartaTextRPG.Maps
 
             return tiles.ToArray();
         }
+        public void LoadNpc()
+        {
+            Npcs = new Npc[NpcIds.Length];
+            for (int i = 0; i < NpcIds.Length; i++)
+            {
+                NpcData data = DataManager.Instance.NpcDict[NpcIds[i]];
+                Npcs[i] = new Npc(data);
+            }
+        }
         public virtual void Enter(CreatureBase? visitor, Vector2Int? pos)
         {
             if (visitor == null)
             {
-                TextManager.ErrorWriteLine($"접근할 수 없습니다.");
+                TextManager.HWriteLine($"접근할 수 없습니다.");
                 return;
             }
 
             Visitor = visitor;
             Visitor?.SetPosition(MapType, pos);
 
-            TextManager.SystemWriteLine($"{visitor.Name}님이 {Name}에 입장하였습니다.");
-            TextManager.CurrentSite(MapType, Name, Description);
+            TextManager.LWriteLine($"{visitor.Name}님이 {Name}에 입장하였습니다.");
+            TextManager.CurrentSite(MapType, GameManager.Instance.SavedRecallPoint, Name, Description);
 
             JobManager.Instance.Push(Job);
         }
@@ -64,12 +74,12 @@ namespace SpartaTextRPG.Maps
         public virtual void WakeUp()
         {
             JobManager.Instance.Push(Job);
-            TextManager.SystemWriteLine("월드로 돌아왔습니다.");
+            TextManager.LWriteLine("월드로 돌아왔습니다.");
         }
         public virtual void Leave(Defines.TileType tileType)
         {
             TextManager.Flush();
-            TextManager.SystemWriteLine($"{Name}에서 떠났습니다.");
+            TextManager.LWriteLine($"{Name}에서 떠났습니다.");
         }
 
         protected void DrawMap()
@@ -100,7 +110,7 @@ namespace SpartaTextRPG.Maps
 
         protected virtual void Job()
         {
-            TextManager.SystemWriteLine($"기본 조작 방법 - 이동 : {Util.KeyString(Defines.UP_KEY)},{Util.KeyString(Defines.DOWN_KEY)},{Util.KeyString(Defines.LEFT_KEY)},{Util.KeyString(Defines.RIGHT_KEY)} 키, 대화/선택 : {Util.KeyString(Defines.ACCEPT_KEY)} 키, 메뉴/취소 : {Util.KeyString(Defines.CANCEL_KEY)} 키");
+            TextManager.LWriteLine($"기본 조작 방법 - 이동 : {Util.KeyString(Defines.UP_KEY)},{Util.KeyString(Defines.DOWN_KEY)},{Util.KeyString(Defines.LEFT_KEY)},{Util.KeyString(Defines.RIGHT_KEY)} 키, 대화/선택 : {Util.KeyString(Defines.ACCEPT_KEY)} 키, 메뉴/취소 : {Util.KeyString(Defines.CANCEL_KEY)} 키");
         }
 
         public virtual void OnEvent(CreatureBase visitor, MapTile prevTile, MapTile nextTile)
@@ -111,7 +121,7 @@ namespace SpartaTextRPG.Maps
             Npc? npc = Npcs.FirstOrDefault(x => x.TileType == nextTile.TileType);
             string shopName = npc?.Name ?? "알 수 없음";
 
-            TextManager.SystemWriteLine($"{shopName}에게 방문했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 대화를 할 수 있습니다.");
+            TextManager.LWriteLine($"{shopName}에게 방문했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 대화를 할 수 있습니다.");
         }
 
         public void OnRecallPoint(CreatureBase visitor, MapTile prevTile, MapTile nextTile)
@@ -119,7 +129,7 @@ namespace SpartaTextRPG.Maps
             if (prevTile.TileType == nextTile.TileType)
                 return;
 
-            TextManager.SystemWriteLine($"귀환지에 도착했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 귀환지를 설정 할 수 있습니다.");
+            TextManager.LWriteLine($"귀환지에 도착했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 귀환지를 설정 할 수 있습니다.");
         }
 
         public void OnExit(CreatureBase visitor, MapTile prevTile, MapTile nextTile)
