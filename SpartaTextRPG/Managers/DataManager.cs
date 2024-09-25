@@ -24,12 +24,13 @@ namespace SpartaTextRPG.Managers
             }
         }
 
-        public Dictionary<Defines.JobType, JobData> JobDict { get; private set; } = new Dictionary<Defines.JobType, JobData>();
+        public Dictionary<JobType, JobData> JobDict { get; private set; } = new Dictionary<JobType, JobData>();
         public Dictionary<int, CreatureStatData> CreatureStatDict { get; private set; } = new Dictionary<int, CreatureStatData>();
         public Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, ItemData>();
         public Dictionary<int, NpcData> NpcDict { get; private set; } = new Dictionary<int, NpcData>();
         public Dictionary<int, SkillData> SkillDict { get; private set; } = new Dictionary<int, SkillData>();
         public Dictionary<int, MonsterData> MonsterDict { get; private set; } = new Dictionary<int, MonsterData>();
+        public Dictionary<MapType, int[][]> MapDict { get; private set; } = new Dictionary<MapType, int[][]>();
 
         public DataManager()
         {
@@ -46,6 +47,7 @@ namespace SpartaTextRPG.Managers
             LoadJobs();
             LoadSkills();
             LoadMonsters();
+            LoadMapData();
         }
         // 1~100
         private void LoadCreatureStats()
@@ -247,7 +249,33 @@ namespace SpartaTextRPG.Managers
                 "덤벼라 제작자의 동료 녀석아!"
             ];
 
-            MonsterDict.Add(3501, new MonsterData { DataId = 3501, JobType = JobType.Mage, MonsterType = MonsterType.Boss, Name = "타락한 대마법사", Description = "이세계를 위협하는 악당", Attack = 100, MaxHp = 5000, Defense = 100, Speed = 150, Exp = 500, Gold = 100000, SkillIds = [2103, 2104], ItemIds = [409, 410, 411, 412], ItemDropRate = 0.1f, Messages = bossMessages });
+            MonsterDict.Add(3501, new MonsterData { DataId = 3501, JobType = JobType.Mage, MonsterType = MonsterType.Boss, Name = "타락한 대마법사", Description = "이세계를 위협하는 악당", Attack = 100, MaxHp = 1200, Defense = 40, Speed = 150, Exp = 500, Gold = 1000, SkillIds = [2103, 2104], ItemIds = [208, 308, 408, 508], ItemDropRate = 0.1f, Messages = bossMessages });
+            MonsterDict.Add(3502, new MonsterData { DataId = 3502, JobType = JobType.Warrior, MonsterType = MonsterType.Boss, Name = "무자비한 산적", Description = "이세계를 위협하는 악당", Attack = 210, MaxHp = 4000, Defense = 80, Speed = 220, Exp = 1000, Gold = 2000, SkillIds = [2202, 2205], ItemIds = [209, 309, 409, 509], ItemDropRate = 0.1f, Messages = bossMessages });
+        }
+
+        private void LoadMapData()
+        {
+            MapDict = new Dictionary<MapType, int[][]>();
+            foreach (MapType mapType in Enum.GetValues(typeof(MapType)))
+            {
+                switch (mapType)
+                {
+                    case MapType.None:
+                    case MapType.SnowField:
+                    case MapType.HighTown:
+                    case MapType.TowerDungeon:
+                        continue;
+                    case MapType.NewbieTown:
+                    case MapType.MidTown:
+                    case MapType.ForestField:
+                    case MapType.DesertField:
+                    case MapType.CaveDungeon:
+                    case MapType.RuinDungeon:
+                        var data = FileManager.Instance.LoadMapData(mapType);
+                        MapDict.Add(mapType, data);
+                        break;
+                }
+            }
         }
 
         public void LoadAllItems()

@@ -147,6 +147,8 @@ namespace SpartaTextRPG.Utils
             None,
             Ground = 11,
             RecallPoint = 12,
+            Sand = 13,
+            Snow = 14,
 
             ItemShopEvent = 21,
             WeaponShopEvent = 22,
@@ -191,7 +193,7 @@ namespace SpartaTextRPG.Utils
         public const int CREATURE_MAX_LEVEL = 20;
         public const int MAX_CONSUMABLE_COUNT = 10;
         public const int MAX_ETC_COUNT = 100;
-        public const int LAST_BOSS_ID = 3501;
+        public const int LAST_BOSS_ID = 3502;
 
         public const ConsoleKey ACCEPT_KEY = ConsoleKey.Enter;
         public const ConsoleKey CANCEL_KEY = ConsoleKey.Escape;

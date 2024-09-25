@@ -2,11 +2,6 @@ using SpartaTextRPG.Creatures;
 using SpartaTextRPG.Datas;
 using SpartaTextRPG.Managers;
 using SpartaTextRPG.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpartaTextRPG.Maps
 {
@@ -16,15 +11,24 @@ namespace SpartaTextRPG.Maps
         public abstract string Description { get; }
         public abstract Defines.MapType MapType { get; }
         public abstract Npc[] Npcs { get; protected set; }
-        public abstract int[][] MapData { get; protected set; }
         public abstract int[] MonsterIds { get; }
         public abstract int[] NpcIds { get; }
         public abstract int BossId { get; }
+        public virtual int[][] MapData { get; protected set; }
+
+        public virtual int RequiredLevel => 1;
 
         public CreatureBase? Visitor { get; private set; }
         public MapTile[] MapTiles { get; protected set; } = [];
 
         private Random rand = new Random();
+
+        public MapBase()
+        {
+            MapData = DataManager.Instance.MapDict[MapType];
+            MapTiles = GenerateMap(MapData);
+            LoadNpc();
+        }
 
         protected MapTile[] GenerateMap(int[][] data)
         {

@@ -220,9 +220,9 @@ namespace SpartaTextRPG.Creatures
         public virtual void Consume(ConsumableItem? consumable)
         {
             // 소비 아이템 사용
-            TextManager.LWriteLine($"{consumable.Name}을(를) 사용하였습니다.");
+            TextManager.LWriteLine($"{consumable?.Name}을(를) 사용하였습니다.");
             SetConsumeableItem(consumable);
-            consumable.RemoveItem(); // 소비아이템 감소시킴
+            consumable?.RemoveItem(); // 소비아이템 감소시킴
         }
         public virtual void SetConsumeableItem(ConsumableItem? consumable)
         {

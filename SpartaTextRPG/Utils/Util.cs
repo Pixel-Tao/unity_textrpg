@@ -203,6 +203,8 @@ namespace SpartaTextRPG.Utils
             switch (type)
             {
                 case Defines.TileType.Ground:
+                case Defines.TileType.Sand:
+                case Defines.TileType.Snow:
                 case Defines.TileType.RecallPoint:
                 case Defines.TileType.Exit1:
                 case Defines.TileType.Exit2:

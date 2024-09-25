@@ -241,6 +241,8 @@ namespace SpartaTextRPG.Managers
                 case Defines.TileType.AccessoryShopEvent:
                 case Defines.TileType.InnEvent:
                 case Defines.TileType.BossEvent:
+                case Defines.TileType.Sand:
+                case Defines.TileType.Snow:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.BackgroundColor = ConsoleColor.DarkGray;
                     Console.Write('■');
