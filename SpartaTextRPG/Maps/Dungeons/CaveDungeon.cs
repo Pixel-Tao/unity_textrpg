@@ -78,6 +78,7 @@ namespace SpartaTextRPG.Maps
         {
             if (Visitor?.CurrentPosition == null) return;
             base.Job();
+            TextManager.Flush();
 
             while (true)
             {

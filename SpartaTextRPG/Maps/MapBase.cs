@@ -84,7 +84,7 @@ namespace SpartaTextRPG.Maps
 
         protected void DrawMap()
         {
-            TextManager.Flush();
+            TextManager.SetCursorPosition(0, 0);
             Hero hero = Visitor as Hero;
             int y = 0;
             bool flag = false;
