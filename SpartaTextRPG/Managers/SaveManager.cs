@@ -42,6 +42,7 @@ namespace SpartaTextRPG.Managers
             data.Hp = hero.Hp;
             data.MapType = hero.CurrentMapType;
             data.Position = hero.CurrentPosition;
+            data.RecallPoint = GameManager.Instance.SavedRecallPoint;
             data.EuqippedAccessoryId = hero.EAccessory?.DataId ?? 0;
             data.EuqippedArmorId = hero.EArmor?.DataId ?? 0;
             data.EuqippedSubWeaponId = hero.ESubWeapon?.DataId ?? 0;

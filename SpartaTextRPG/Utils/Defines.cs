@@ -23,6 +23,13 @@ namespace SpartaTextRPG.Utils
             Archer,
             Thief
         }
+        public enum MonsterType
+        {
+            None,
+            Common,
+            Elite,
+            Boss
+        }
         public enum ItemType
         {
             None,
@@ -121,6 +128,8 @@ namespace SpartaTextRPG.Utils
             BattleAttack,
             BattleSkill,
             Sort,
+            Cheat,
+            Recall,
         }
 
         public enum MessageType
@@ -175,11 +184,14 @@ namespace SpartaTextRPG.Utils
         public const int ARCHER_INVENTORY_SIZE = 25;
         public const int THIEF_INVENTORY_SIZE = 25;
         public const int THIEF_DOUBLE_ATTACK_RATE = 30; // 두번공격 확률
+        public const int BATTLE_ESCAPE_RATE = 50; // 도망칠 확률
 
         public const int CREATURE_MAX_LEVEL = 20;
 
         public const int MAX_CONSUMABLE_COUNT = 10;
         public const int MAX_ETC_COUNT = 100;
+
+        public const int LAST_BOSS_ID = 3501;
 
 
         public const ConsoleKey ACCEPT_KEY = ConsoleKey.Enter;

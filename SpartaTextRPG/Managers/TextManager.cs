@@ -24,11 +24,14 @@ namespace SpartaTextRPG.Managers
         private static int _maxGuideLineCount = 1;
         private static int _siteLineCount = 2;
         public static int FixedLineCount => _maxQueueCount + _maxGuideLineCount + _siteLineCount;
+        private static int _endingCreditLineCount = 30;
+        private static int _defaultLineCount = 8;
 
         public static void Init()
         {
             if (_messageQueue.Count == 0)
             {
+                _maxQueueCount = _defaultLineCount;
                 for (int i = 0; i < _maxQueueCount; i++)
                 {
                     _messageQueue.Enqueue("");
@@ -358,7 +361,7 @@ namespace SpartaTextRPG.Managers
                 _messageQueue.Dequeue();
 
             _messageQueue.Enqueue(string.Format(format, arg));
-
+            DateTime now = DateTime.Now;
             for (int i = 0; i < _maxQueueCount; i++)
             {
                 switch (type)
@@ -380,7 +383,7 @@ namespace SpartaTextRPG.Managers
                 Console.Write(new string(' ', Console.WindowWidth));
                 Console.CursorLeft = 0;
                 if (!string.IsNullOrWhiteSpace(_messageQueue.ElementAt(i)))
-                    Console.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss")}] {_messageQueue.ElementAt(i)}");
+                    Console.WriteLine($"[{now.ToString("HH:mm:ss")}] {_messageQueue.ElementAt(i)}");
                 else
                     Console.WriteLine();
 
@@ -425,7 +428,7 @@ namespace SpartaTextRPG.Managers
         {
             WriteLine();
             if (!string.IsNullOrWhiteSpace(comment))
-            { 
+            {
                 WriteLine(comment);
                 WriteLine();
             }
@@ -469,6 +472,7 @@ namespace SpartaTextRPG.Managers
             {
                 Flush();
                 WriteLine(message);
+                WriteLine();
                 HWriteItems(strings, index);
 
                 key = Console.ReadKey(intercept: true).Key;
@@ -505,6 +509,64 @@ namespace SpartaTextRPG.Managers
             }
 
             Console.ResetColor();
+        }
+        private static void EmptySystemLog()
+        {
+            _messageQueue.Clear();
+            for (int i = 0; i < _maxQueueCount; i++)
+            {
+                _messageQueue.Enqueue("");
+                Console.WriteLine(new string(' ', Console.WindowWidth));
+            }
+        }
+        public static void EndingCredit()
+        {
+            _maxQueueCount = _endingCreditLineCount;
+            Flush();
+            EmptySystemLog();
+
+            void emptyLine(int count)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Thread.Sleep(500);
+                    SystemWriteLine("");
+                }
+            }
+
+            SystemWriteLine("이세계 텍스트 RPG");
+            emptyLine(5);
+            SystemWriteLine("제작 : 7조(인생한방이조) 김태호");
+            emptyLine(3);
+            SystemWriteLine("기    획 : 김태호");
+            emptyLine(3);
+            SystemWriteLine("각    본 : 김태호");
+            emptyLine(3);
+            SystemWriteLine("연    출 : 김태호");
+            emptyLine(3);
+            SystemWriteLine("개    발 : 김태호");
+            emptyLine(3);
+            SystemWriteLine("리 소 스 : 김태호");
+            emptyLine(3);
+            SystemWriteLine("고    생 : 김태호");
+            emptyLine(3);
+            SystemWriteLine("특별출연 : 르탄이");
+            emptyLine(3);
+            SystemWriteLine("지    원 : 스파르타코딩클럽 내일배움캠프");
+            emptyLine(3);
+            SystemWriteLine("한 마 디 : 플레이 해주셔서 베리 땡큐 감사!");
+            emptyLine(15);
+            SystemWriteLine($"{Defines.ACCEPT_KEY} 키를 누르면 다음으로 넘어갑니다.");
+
+            while (Console.ReadKey().Key != Defines.ACCEPT_KEY)
+            {
+
+            }
+
+            _maxQueueCount = _defaultLineCount;
+            _writeLineCount += _endingCreditLineCount - _defaultLineCount;
+            EmptySystemLog();
+            Flush();
         }
     }
 }

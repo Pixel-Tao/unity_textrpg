@@ -179,5 +179,10 @@ namespace SpartaTextRPG.Skills
             Owner.SetBuffSkill(this);
         }
 
+        public void AddCount(int count = 1)
+        {
+            CurrentCastCount += count;
+        }
+
     }
 }

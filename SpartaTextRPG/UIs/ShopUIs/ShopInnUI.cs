@@ -1,5 +1,6 @@
 using SpartaTextRPG.Creatures;
 using SpartaTextRPG.Managers;
+using SpartaTextRPG.Skills;
 using SpartaTextRPG.Utils;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace SpartaTextRPG.UIs.ShopUIs
         public override Defines.MenuType[] Menus => [
             Defines.MenuType.Rest,
             Defines.MenuType.Exit,
+            Defines.MenuType.Cheat,
         ];
 
         public ShopInnUI(CreatureBase owner) : base(owner)
@@ -54,15 +56,41 @@ namespace SpartaTextRPG.UIs.ShopUIs
                             TextManager.MenuWriteLine("여관을 나갑니다.");
                             GameManager.Instance.WakeUpWorld();
                             return;
+                        case Defines.MenuType.Cheat:
+                            TextManager.Confirm("정말로 르탄이의 축복을 받으시겠습니까?", () =>
+                            {
+                                TextManager.Confirm("그냥 가셔도 됩니다.", null, () =>
+                                {
+                                    TextManager.Confirm("이 선택은 돌이킬 수 없습니다.", () =>
+                                    {
+                                        Cheat(visitor);
+                                    });
+                                });
+                            });
+                            break;
                     }
                 }
-                else if(key == ConsoleKey.Escape)
+                else if (key == ConsoleKey.Escape)
                 {
                     TextManager.MenuWriteLine("여관을 나갑니다.");
                     GameManager.Instance.WakeUpWorld();
                     return;
                 }
             }
+        }
+
+        private void Cheat(CreatureBase visitor)
+        {
+            TextManager.ErrorWriteLine("***** 르탄이의 축복이 활성화 되었습니다. *****");
+            visitor.SetLevel(Defines.CREATURE_MAX_LEVEL);
+            visitor.SetDefaultStat(9999, 999, 200, 200);
+            visitor.OnHealed(visitor.MaxHp);
+            foreach (Skill skill in visitor.SkillBook.Skills)
+                skill.AddCount(99);
+            if (visitor.Inventory?.Gold < 1000000)
+                visitor.Inventory?.AddGold(1000000);
+            DataManager.Instance.LoadAllItems();
+            TextManager.ErrorWriteLine("이 일로 무슨일이 벌어져도 저는 아무런 책임지지 않겠습니다.");
         }
     }
 }

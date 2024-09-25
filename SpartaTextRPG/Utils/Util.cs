@@ -143,6 +143,10 @@ namespace SpartaTextRPG.Utils
                     return "스킬";
                 case Defines.MenuType.Sort:
                     return "정렬";
+                case Defines.MenuType.Cheat:
+                    return "르탄이의 축복";
+                case Defines.MenuType.Recall:
+                    return "귀환";
                 default:
                     return type.ToString();
             }
@@ -153,10 +157,22 @@ namespace SpartaTextRPG.Utils
             {
                 case Defines.MapType.NewbieTown:
                     return "초보자 마을";
+                case Defines.MapType.MidTown:
+                    return "중급자 마을";
+                case Defines.MapType.HighTown:
+                    return "상급자 마을";
                 case Defines.MapType.ForestField:
                     return "초보자 숲";
+                case Defines.MapType.DesertField:
+                    return "사막 지역";
+                case Defines.MapType.SnowField:
+                    return "빙하 지역";
                 case Defines.MapType.CaveDungeon:
                     return "동굴 던전";
+                case Defines.MapType.RuinDungeon:
+                    return "폐허 던전";
+                case Defines.MapType.TowerDungeon:
+                    return "타워 던전";
                 default:
                     return "알 수 없음";
             }

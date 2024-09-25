@@ -131,13 +131,15 @@ namespace SpartaTextRPG.Creatures
             CreatureStatData statData = DataManager.Instance.CreatureStatDict[level];
             Level = level;
             NextLevelExp = statData.NextLevelExp;
-
-            DefaultMaxHp = statData.MaxHp;
-            DefaultAttack = statData.Attack;
-            DefaultDefense = statData.Defense;
-            DefaultSpeed = statData.Speed;
-
+            SetDefaultStat(statData.MaxHp, statData.Attack, statData.Defense, statData.Speed);
             BonusUpdate();
+        }
+        public virtual void SetDefaultStat(int maxHp, int attack, int defense, int speed)
+        {
+            DefaultMaxHp = maxHp;
+            DefaultAttack = attack;
+            DefaultDefense = defense;
+            DefaultSpeed = speed;
         }
         public virtual void LevelUp()
         {

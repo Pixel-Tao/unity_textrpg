@@ -69,7 +69,16 @@ namespace SpartaTextRPG.UIs.BattleUIs
                         hero.Inventory.AddGold(goldSum);
                         Thread.Sleep(1000);
                         hero.BuffClear();
-                        GameManager.Instance.WakeUpWorld();
+
+
+                        if (IsGameEnd())
+                        {
+                            TextManager.EndingCredit();
+                            GameManager.Instance.GameEnd();
+                        }
+                        else
+                            GameManager.Instance.WakeUpWorld();
+
                         return;
                     }
 
@@ -112,6 +121,24 @@ namespace SpartaTextRPG.UIs.BattleUIs
                     }
                     else
                     {
+                        if (key == Defines.ACCEPT_KEY && Menus[selectedMenuIndex] == Defines.MenuType.BattleEscape)
+                        {
+                            if (random.Next(0, 100) > Defines.BATTLE_ESCAPE_RATE)
+                            {
+                                TextManager.WarningWriteLine("전투에서 도망치지 못했습니다. 턴이 넘어갑니다.");
+                                turns.Enqueue(turns.Dequeue());
+                                monsterSelectMode = false;
+                                Thread.Sleep(1000);
+                                continue;
+                            }
+
+                            // 도망 성공
+                            TextManager.SystemWriteLine("전투에서 도망쳤습니다.");
+                            Thread.Sleep(1000);
+                            GameManager.Instance.WakeUpWorld();
+                            return;
+                        }
+
                         // 메뉴 선택 모드
                         HandleMenuSelection(hero, key);
                     }
@@ -272,12 +299,6 @@ namespace SpartaTextRPG.UIs.BattleUIs
                         }
 
                         hero.Consume(item.CastItem<ConsumableItem>());
-                        break;
-                    case Defines.MenuType.BattleEscape:
-                        // 도망
-                        //UIManager.Instance.ShowBattleEscapeJob(Owner, Monsters);
-                        TextManager.BattleWriteLine("전투에서 도망쳤습니다.");
-                        GameManager.Instance.WakeUpWorld();
                         break;
                 }
             }
@@ -442,6 +463,15 @@ namespace SpartaTextRPG.UIs.BattleUIs
             while (i < count);
 
             return targets.ToArray();
+        }
+
+        private bool IsGameEnd()
+        {
+            Monster? boss = Monsters.FirstOrDefault(s => s.IsDead == true && Defines.LAST_BOSS_ID == s.MonsterDataId);
+            if (boss == null) return false;
+            if (boss.IsDead == false) return false;
+
+            return true;
         }
     }
 }

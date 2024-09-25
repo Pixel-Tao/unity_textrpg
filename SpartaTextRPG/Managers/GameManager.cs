@@ -33,10 +33,11 @@ namespace SpartaTextRPG.Managers
         {
             Hero = new Hero();
             Hero.SetInfo(data);
+            SavedRecallPoint = data.RecallPoint;
         }
         public void EnterWorld(Defines.MapType mapType, Vector2Int pos)
         {
-            if(mapType == Defines.MapType.None)
+            if (mapType == Defines.MapType.None)
             {
                 TextManager.ErrorWriteLine("맵 정보가 없습니다.");
                 JobManager.Instance.Push(UIManager.Instance.GameTitle);
@@ -122,7 +123,22 @@ namespace SpartaTextRPG.Managers
             SavedRecallPoint = mapType;
             TextManager.SystemWriteLine("귀환지를 저장하였습니다.");
         }
-
+        public void Recall()
+        {
+            EnterWorld(SavedRecallPoint, Defines.TileType.RecallPoint);
+        }
+        public void GameEnd()
+        {
+            TextManager.Confirm(
+                "엄청난 위협으로 세상을 구해냈습니다.\n"
+                + "제작자가 보스를 추가하지 않는 한 세상은 평화로울 것입니다.\n"
+                + "더이 상 진행하지 않고 게임을 종료하시겠습니까?", () =>
+            {
+                EnterdMap = null;
+                TextManager.SystemWriteLine("타이틀 화면으로 돌아갑니다.");
+                JobManager.Instance.Push(UIManager.Instance.GameTitle);
+            });
+        }
         public void GameExit()
         {
             TextManager.Confirm("정말로 종료하시겠습니까?", () =>

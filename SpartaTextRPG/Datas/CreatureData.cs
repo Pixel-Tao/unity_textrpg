@@ -44,6 +44,7 @@ namespace SpartaTextRPG.Datas
     public class MonsterData
     {
         public int DataId;
+        public Defines.MonsterType MonsterType;
         public Defines.JobType JobType;
         public string? Name;
         public string? Description;

@@ -16,7 +16,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
             Defines.MenuType.Status,
             Defines.MenuType.Inventory,
             Defines.MenuType.Skill,
-            Defines.MenuType.Quest,
+            Defines.MenuType.Recall,
             Defines.MenuType.GameSave,
             Defines.MenuType.GameExit,
         };
@@ -49,9 +49,35 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                             // 스킬
                             UIManager.Instance.ShowPlayerSkillJob(Owner);
                             break;
-                        case Defines.MenuType.Quest:
+                        case Defines.MenuType.Recall:
                             // 퀘스트
-                            UIManager.Instance.ShowPlayerQuestJob(Owner);
+                            if (TextManager.Confirm("마을로 귀환하시겠습니까?"))
+                            {
+                                if (GameManager.Instance.Hero == null)
+                                {
+                                    TextManager.ErrorWriteLine("참조 가능한 플레이어 정보가 없습니다.");
+                                    break;
+                                }
+                                if (GameManager.Instance.Hero.CurrentMapType == GameManager.Instance.SavedRecallPoint)
+                                {
+                                    TextManager.SystemWriteLine("이미 마을에 있습니다.");
+                                    break;
+                                }
+
+                                switch (GameManager.Instance.Hero.CurrentMapType)
+                                {
+                                    case Defines.MapType.CaveDungeon:
+                                    case Defines.MapType.RuinDungeon:
+                                    case Defines.MapType.TowerDungeon:
+                                        TextManager.SystemWriteLine("던전에서는 귀환을 할 수 없습니다.");
+                                        break;
+                                    default:
+                                        TextManager.Flush();
+                                        TextManager.SystemWriteLine($"{Util.MapTypeToString(GameManager.Instance.SavedRecallPoint)}(으)로 이동합니다.");
+                                        GameManager.Instance.Recall();
+                                        return;
+                                }
+                            }
                             break;
                         case Defines.MenuType.GameSave:
                             // 게임 저장
@@ -67,7 +93,7 @@ namespace SpartaTextRPG.UIs.PlayerUIs
                 {
                     SelectMenu(key);
                 }
-                else if(key == Defines.CANCEL_KEY)
+                else if (key == Defines.CANCEL_KEY)
                 {
                     GameManager.Instance.WakeUpWorld();
                     return;

@@ -161,9 +161,7 @@ namespace SpartaTextRPG.Managers
                 "무엇을 구매하시겠습니까?",
                 ];
             string[] innMessaages = ["푹 쉬다 가세요~", "방금 청소를 끝냈어요.", "마침 빈방이 딱 하나가 있네요."];
-            //int[] items = [101, 104, 105, 106, 107, 108];
-            // 임시
-            int[] items = ItemDict.Values.Select(s => s.DataId).ToArray();
+            int[] items = [101, 104, 105, 106, 107, 108];
             // 잡화 상점
             NpcDict.Add(1101, new NpcData { DataId = 1101, NpcType = NpcType.ItemShopNpc, Name = "초급 물약 상인", Description = "초보자들이 사용하기 좋은 잡화를 판다.", SaleItemIds = items, Messaages = itemMessaages });
             NpcDict.Add(1102, new NpcData { DataId = 1102, NpcType = NpcType.ItemShopNpc, Name = "중급 물약 상인", Description = "중급 모험가들이 사용하기 좋은 잡화를 판다.", SaleItemIds = [101, 102, 104, 105, 106, 107, 108], Messaages = itemMessaages });
@@ -230,18 +228,42 @@ namespace SpartaTextRPG.Managers
         private void LoadMonsters()
         {
             MonsterDict = new Dictionary<int, MonsterData>();
-            MonsterDict.Add(3101, new MonsterData { DataId = 3101, JobType = JobType.Warrior, Name = "고블린", Description = "못생긴 고블린", Attack = 5, MaxHp = 30, Defense = 0, Speed = 10, Exp = 10, Gold = 1000, SkillIds = new int[] { }, ItemIds = new int[] { 101 }, ItemDropRate = 0.5f });
-            MonsterDict.Add(3102, new MonsterData { DataId = 3102, JobType = JobType.Warrior, Name = "오크", Description = "강한 오크", Attack = 10, MaxHp = 50, Defense = 5, Speed = 5, Exp = 20, Gold = 2000, SkillIds = new int[] { }, ItemIds = new int[] { 102 }, ItemDropRate = 0.5f });
-            MonsterDict.Add(3103, new MonsterData { DataId = 3103, JobType = JobType.Warrior, Name = "트롤", Description = "거대한 트롤", Attack = 15, MaxHp = 100, Defense = 10, Speed = 0, Exp = 30, Gold = 3000, SkillIds = new int[] { }, ItemIds = new int[] { 103 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3101, new MonsterData { DataId = 3101, JobType = JobType.Warrior, MonsterType = MonsterType.Common, Name = "고블린", Description = "못생긴 고블린", Attack = 5, MaxHp = 30, Defense = 0, Speed = 10, Exp = 10, Gold = 1000, SkillIds = [], ItemIds = new int[] { 101 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3102, new MonsterData { DataId = 3102, JobType = JobType.Warrior, MonsterType = MonsterType.Common, Name = "오크", Description = "강한 오크", Attack = 10, MaxHp = 50, Defense = 5, Speed = 5, Exp = 20, Gold = 2000, SkillIds = [], ItemIds = new int[] { 102 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3103, new MonsterData { DataId = 3103, JobType = JobType.Warrior, MonsterType = MonsterType.Common, Name = "트롤", Description = "거대한 트롤", Attack = 15, MaxHp = 100, Defense = 10, Speed = 0, Exp = 30, Gold = 3000, SkillIds = [], ItemIds = new int[] { 103 }, ItemDropRate = 0.5f });
 
-            MonsterDict.Add(3201, new MonsterData { DataId = 3201, JobType = JobType.Archer, Name = "스켈레톤", Description = "뼈만 남은 스켈레톤", Attack = 5, MaxHp = 300, Defense = 0, Speed = 10, Exp = 60, Gold = 1000, SkillIds = new int[] { }, ItemIds = new int[] { 201 }, ItemDropRate = 0.5f });
-            MonsterDict.Add(3202, new MonsterData { DataId = 3202, JobType = JobType.Archer, Name = "좀비", Description = "부활한 좀비", Attack = 10, MaxHp = 500, Defense = 5, Speed = 5, Exp = 80, Gold = 2000, SkillIds = new int[] { }, ItemIds = new int[] { 202 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3201, new MonsterData { DataId = 3201, JobType = JobType.Archer, MonsterType = MonsterType.Common, Name = "스켈레톤", Description = "뼈만 남은 스켈레톤", Attack = 5, MaxHp = 300, Defense = 0, Speed = 10, Exp = 60, Gold = 1000, SkillIds = [], ItemIds = new int[] { 201 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3202, new MonsterData { DataId = 3202, JobType = JobType.Archer, MonsterType = MonsterType.Common, Name = "좀비", Description = "부활한 좀비", Attack = 10, MaxHp = 500, Defense = 5, Speed = 5, Exp = 80, Gold = 2000, SkillIds = [], ItemIds = new int[] { 202 }, ItemDropRate = 0.5f });
 
-            MonsterDict.Add(3301, new MonsterData { DataId = 3203, JobType = JobType.Mage, Name = "마녀", Description = "마녀", Attack = 50, MaxHp = 300, Defense = 10, Speed = 30, Exp = 120, Gold = 3000, SkillIds = new int[] { }, ItemIds = new int[] { 203 }, ItemDropRate = 0.5f });
-            MonsterDict.Add(3302, new MonsterData { DataId = 3301, JobType = JobType.Mage, Name = "스파이더", Description = "거대한 스파이더", Attack = 60, MaxHp = 350, Defense = 30, Speed = 10, Exp = 130, Gold = 1000, SkillIds = new int[] { }, ItemIds = new int[] { 301 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3301, new MonsterData { DataId = 3203, JobType = JobType.Mage, MonsterType = MonsterType.Elite, Name = "마녀", Description = "마녀", Attack = 50, MaxHp = 300, Defense = 10, Speed = 30, Exp = 120, Gold = 3000, SkillIds = [], ItemIds = new int[] { 203 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3302, new MonsterData { DataId = 3301, JobType = JobType.Mage, MonsterType = MonsterType.Elite, Name = "스파이더", Description = "거대한 스파이더", Attack = 60, MaxHp = 350, Defense = 30, Speed = 10, Exp = 130, Gold = 1000, SkillIds = [], ItemIds = new int[] { 301 }, ItemDropRate = 0.5f });
 
-            MonsterDict.Add(3401, new MonsterData { DataId = 3401, JobType = JobType.Thief, Name = "원숭이", Description = "재빠른 원숭이", Attack = 30, MaxHp = 600, Defense = 15, Speed = 50, Exp = 140, Gold = 2000, SkillIds = new int[] { }, ItemIds = new int[] { 401 }, ItemDropRate = 0.5f });
-            MonsterDict.Add(3402, new MonsterData { DataId = 3402, JobType = JobType.Thief, Name = "도둑", Description = "도둑", Attack = 45, MaxHp = 700, Defense = 20, Speed = 55, Exp = 150, Gold = 3000, SkillIds = new int[] { }, ItemIds = new int[] { 402 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3401, new MonsterData { DataId = 3401, JobType = JobType.Thief, MonsterType = MonsterType.Elite, Name = "원숭이", Description = "재빠른 원숭이", Attack = 30, MaxHp = 600, Defense = 15, Speed = 50, Exp = 140, Gold = 2000, SkillIds = [], ItemIds = new int[] { 401 }, ItemDropRate = 0.5f });
+            MonsterDict.Add(3402, new MonsterData { DataId = 3402, JobType = JobType.Thief, MonsterType = MonsterType.Elite, Name = "도둑", Description = "도둑", Attack = 45, MaxHp = 700, Defense = 20, Speed = 55, Exp = 150, Gold = 3000, SkillIds = [], ItemIds = new int[] { 402 }, ItemDropRate = 0.5f });
+
+            MonsterDict.Add(3501, new MonsterData { DataId = 3501, JobType = JobType.Mage, MonsterType = MonsterType.Boss, Name = "타락한 대마법사", Description = "이세계를 위협하는 악당", Attack = 100, MaxHp = 5000, Defense = 100, Speed = 150, Gold = 100000, SkillIds = [2103, 2104], ItemIds = [409, 410, 411, 412], ItemDropRate = 0.1f });
+        }
+
+        public void LoadAllItems()
+        {
+            int[] cheatItems = ItemDict.Values.Where(s => s.Type == ItemType.Consumable).Select(s => s.DataId).ToArray();
+            int[] cheatEquips = ItemDict.Values.Where(s => s.Type == ItemType.Equipment).Select(s => s.DataId).ToArray();
+
+            NpcDict[1101].SaleItemIds = cheatItems;
+            NpcDict[1102].SaleItemIds = cheatItems;
+            NpcDict[1103].SaleItemIds = cheatItems;
+
+            NpcDict[1104].SaleItemIds = cheatEquips;
+            NpcDict[1105].SaleItemIds = cheatEquips;
+            NpcDict[1106].SaleItemIds = cheatEquips;
+
+            NpcDict[1107].SaleItemIds = cheatEquips;
+            NpcDict[1108].SaleItemIds = cheatEquips;
+            NpcDict[1109].SaleItemIds = cheatEquips;
+
+            NpcDict[1110].SaleItemIds = cheatEquips;
+            NpcDict[1111].SaleItemIds = cheatEquips;
+            NpcDict[1112].SaleItemIds = cheatEquips;
         }
     }
 }

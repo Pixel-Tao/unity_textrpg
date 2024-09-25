@@ -25,6 +25,7 @@ namespace SpartaTextRPG.Datas
         public int BuffSkillId;
         public Defines.MapType MapType;
         public Vector2Int Position;
+        public Defines.MapType RecallPoint;
         public SaveInventoryData InventoryData;
         public List<SaveSkillData> Skills;
     }
