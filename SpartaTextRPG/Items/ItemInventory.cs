@@ -178,6 +178,8 @@ namespace SpartaTextRPG.Items
         }
         public void AddItem(ItemBase item, int count = 1)
         {
+            if (CanTake(item) == false) return;
+
             int emptySlotIndex = Array.IndexOf(Items, null);
             if (item.ItemType == Defines.ItemType.Equipment && emptySlotIndex != -1)
             {
@@ -199,30 +201,27 @@ namespace SpartaTextRPG.Items
             if (emptySlotIndex != -1)
                 Items[emptySlotIndex] = item;
         }
-        public void AddItem(ItemData item, int count = 1)
+        public void AddItem(ItemData itemData, int count = 1)
         {
-            if (DataManager.Instance.ItemDict.TryGetValue(item.DataId, out ItemData itemData))
+            switch (itemData.Type)
             {
-                switch (itemData.Type)
-                {
-                    case Defines.ItemType.Consumable:
-                        ConsumableItem consumableItem = new ConsumableItem(Owner);
-                        consumableItem.SetInfo(itemData);
-                        consumableItem.AddCount(count);
-                        AddItem(consumableItem);
-                        break;
-                    case Defines.ItemType.Equipment:
-                        EquipmentItem equipmentItem = new EquipmentItem(Owner);
-                        equipmentItem.SetInfo(itemData);
-                        AddItem(equipmentItem);
-                        break;
-                    case Defines.ItemType.Etc:
-                        EtcItem etcItem = new EtcItem(Owner);
-                        etcItem.SetInfo(itemData);
-                        etcItem.AddCount(count);
-                        AddItem(etcItem);
-                        break;
-                }
+                case Defines.ItemType.Consumable:
+                    ConsumableItem consumableItem = new ConsumableItem(Owner);
+                    consumableItem.SetInfo(itemData);
+                    consumableItem.AddCount(count);
+                    AddItem(consumableItem);
+                    break;
+                case Defines.ItemType.Equipment:
+                    EquipmentItem equipmentItem = new EquipmentItem(Owner);
+                    equipmentItem.SetInfo(itemData);
+                    AddItem(equipmentItem);
+                    break;
+                case Defines.ItemType.Etc:
+                    EtcItem etcItem = new EtcItem(Owner);
+                    etcItem.SetInfo(itemData);
+                    etcItem.AddCount(count);
+                    AddItem(etcItem);
+                    break;
             }
         }
         public void RemoveItem(int dataId, int count = 1)
@@ -337,6 +336,43 @@ namespace SpartaTextRPG.Items
             return Items.Where(s => s != null && s.GetType() == typeof(T))
                 .Select(s => s.CastItem<T>())
                 .ToArray();
+        }
+
+        public ItemBase[] GetItems()
+        {
+            return Items.Where(s => s != null).ToArray();
+        }
+
+        public bool CanTake(ItemBase item)
+        {
+            if (item.ItemType != Defines.ItemType.Equipment)
+            {
+                if (HasItem(item) == false && IsFull())
+                {
+                    TextManager.MWriteLine("인벤토리가 가득 찼습니다.");
+                    return false;
+                }
+                else if (item.ItemType == Defines.ItemType.Consumable && IsFullCount(item))
+                {
+                    TextManager.MWriteLine("소지 가능한 수를 초과했습니다.");
+                    return false;
+                }
+            }
+            else if (item.ItemType == Defines.ItemType.Equipment)
+            {
+                if (IsFull())
+                {
+                    TextManager.MWriteLine("인벤토리가 가득 찼습니다.");
+                    return false;
+                }
+                else if (HasEquipmentItem(item))
+                {
+                    TextManager.LWriteLine("해당 장비는 이미 보유하고 있습니다.");
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

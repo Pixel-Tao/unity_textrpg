@@ -131,7 +131,6 @@ namespace SpartaTextRPG.Utils
             Cheat,
             Recall,
         }
-
         public enum MessageType
         {
             None,
@@ -143,7 +142,6 @@ namespace SpartaTextRPG.Utils
             Menu,
             MenuSelect,
         }
-
         public enum TileType
         {
             None,
@@ -186,17 +184,14 @@ namespace SpartaTextRPG.Utils
         public const int WARRIOR_INVENTORY_SIZE = 30;
         public const int MAGE_INVENTORY_SIZE = 20;
         public const int ARCHER_INVENTORY_SIZE = 25;
-        public const int THIEF_INVENTORY_SIZE = 25;
+        public const int THIEF_INVENTORY_SIZE = 25; 
         public const int THIEF_DOUBLE_ATTACK_RATE = 30; // 두번공격 확률
         public const int BATTLE_ESCAPE_RATE = 50; // 도망칠 확률
 
         public const int CREATURE_MAX_LEVEL = 20;
-
         public const int MAX_CONSUMABLE_COUNT = 10;
         public const int MAX_ETC_COUNT = 100;
-
         public const int LAST_BOSS_ID = 3501;
-
 
         public const ConsoleKey ACCEPT_KEY = ConsoleKey.Enter;
         public const ConsoleKey CANCEL_KEY = ConsoleKey.Escape;

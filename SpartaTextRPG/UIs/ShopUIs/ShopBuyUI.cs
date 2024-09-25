@@ -98,31 +98,9 @@ namespace SpartaTextRPG.UIs.ShopUIs
                 TextManager.MWriteLine("골드가 부족합니다.");
                 return false;
             }
-            else if (item.ItemType != Defines.ItemType.Equipment)
+            else if (visitor.Inventory.CanTake(item))
             {
-                if(visitor.Inventory.HasItem(item) == false && visitor.Inventory.IsFull())
-                {
-                    TextManager.MWriteLine("인벤토리가 가득 찼습니다.");
-                    return false;
-                }
-                else if (item.ItemType == Defines.ItemType.Consumable && visitor.Inventory.IsFullCount(item))
-                {
-                    TextManager.MWriteLine("소지 가능한 수를 초과했습니다.");
-                    return false;
-                }
-            }
-            else if (item.ItemType == Defines.ItemType.Equipment)
-            {
-                if (visitor.Inventory.IsFull())
-                {
-                    TextManager.MWriteLine("인벤토리가 가득 찼습니다.");
-                    return false;
-                }
-                else if (visitor.Inventory.HasEquipmentItem(item))
-                {
-                    TextManager.LWriteLine("해당 장비는 이미 보유하고 있습니다.");
-                    return false;
-                }
+                return false;
             }
 
             return true;

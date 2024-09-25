@@ -8,13 +8,10 @@ namespace SpartaTextRPG.Maps
     public class CaveDungeon : MapBase
     {
         public override string Name => "초보자의 숲";
-
         public override string Description => "초보자들을 위한 사냥터 입니다.";
-
         public override Defines.MapType MapType => Defines.MapType.CaveDungeon;
 
         public override Npc[] Npcs { get; protected set; }
-
         public override int[][] MapData { get; protected set; } = new int[][]
         {
             [ 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91 ],
@@ -49,10 +46,8 @@ namespace SpartaTextRPG.Maps
             [ 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 53, 53, 53, 91, 91 ],
 
         };
-
         public override int[] MonsterIds => [3201, 3202, 3203, 3301, 3401, 3402];
         public override int[] NpcIds => [];
-
         public override int BossId => 3501;
 
         public CaveDungeon()
@@ -60,7 +55,7 @@ namespace SpartaTextRPG.Maps
             MapTile[] maps = GenerateMap(MapData);
             MapTiles = maps;
         }
-
+        
         public override void Leave(Defines.TileType exitType)
         {
             base.Leave(exitType);
@@ -155,7 +150,7 @@ namespace SpartaTextRPG.Maps
                         OnExit(Visitor, prevTile, tile.Value);
                         return;
                     }
-                    else if (RandomBattle(15))
+                    else if (RandomBattle(5))
                         return;
                 }
             }

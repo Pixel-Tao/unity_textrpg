@@ -56,6 +56,11 @@ namespace SpartaTextRPG.Managers
             }
         }
 
+        public static void SetCursorPosition(int left, int top)
+        {
+            Console.SetCursorPosition(left, top + FixedLineCount);
+        }
+
         public static void InputWriteLine(string format, params object?[]? arg)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -90,13 +95,13 @@ namespace SpartaTextRPG.Managers
             Console.ResetColor();
         }
 
-        public static void TalkWriteLine(string format, params object?[]? arg)
+        public static void LogoWriteLine(string format, params object?[]? arg)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             WriteLine(format, arg);
             Console.ResetColor();
         }
-        public static void TalkWrite(string format, params object?[]? arg)
+        public static void LogoWrite(string format, params object?[]? arg)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Write(format, arg);

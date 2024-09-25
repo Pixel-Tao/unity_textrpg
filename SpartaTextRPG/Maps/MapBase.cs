@@ -107,12 +107,10 @@ namespace SpartaTextRPG.Maps
             }
             TextManager.WriteLine();
         }
-
         protected virtual void Job()
         {
             TextManager.LWriteLine($"기본 조작 방법 - 이동 : {Util.KeyString(Defines.UP_KEY)},{Util.KeyString(Defines.DOWN_KEY)},{Util.KeyString(Defines.LEFT_KEY)},{Util.KeyString(Defines.RIGHT_KEY)} 키, 대화/선택 : {Util.KeyString(Defines.ACCEPT_KEY)} 키, 메뉴/취소 : {Util.KeyString(Defines.CANCEL_KEY)} 키");
         }
-
         public virtual void OnEvent(CreatureBase visitor, MapTile prevTile, MapTile nextTile)
         {
             if (prevTile.TileType == nextTile.TileType)
@@ -123,7 +121,6 @@ namespace SpartaTextRPG.Maps
 
             TextManager.LWriteLine($"{shopName}에게 방문했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 대화를 할 수 있습니다.");
         }
-
         public void OnRecallPoint(CreatureBase visitor, MapTile prevTile, MapTile nextTile)
         {
             if (prevTile.TileType == nextTile.TileType)
@@ -131,7 +128,6 @@ namespace SpartaTextRPG.Maps
 
             TextManager.LWriteLine($"귀환지에 도착했습니다. {Util.KeyString(Defines.ACCEPT_KEY)} 키를 눌러 귀환지를 설정 할 수 있습니다.");
         }
-
         public void OnExit(CreatureBase visitor, MapTile prevTile, MapTile nextTile)
         {
             if (prevTile.TileType == nextTile.TileType)
@@ -139,9 +135,8 @@ namespace SpartaTextRPG.Maps
 
             Leave(nextTile.TileType);
         }
-
         
-        protected bool RandomBattle(float percent = 10)
+        protected bool RandomBattle(float percent = 10, int minMonsterCount = 1)
         {
             // 필드, 던전에서 이동중에 확률로 전투를 진행하도록 함.
 
@@ -158,9 +153,9 @@ namespace SpartaTextRPG.Maps
             return false;
         }
 
-        protected int[] GetRandomMonsters()
+        protected int[] GetRandomMonsters(int minMonsterCount = 1)
         {
-            int monsterCount = rand.Next(1, MonsterIds.Length + 1);
+            int monsterCount = rand.Next(minMonsterCount, MonsterIds.Length + 1);
 
             int[] randMonsterIds = new int[monsterCount];
             for (int i = 0; i < monsterCount; i++)

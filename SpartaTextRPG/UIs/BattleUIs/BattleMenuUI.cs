@@ -1,4 +1,5 @@
 using SpartaTextRPG.Creatures;
+using SpartaTextRPG.Datas;
 using SpartaTextRPG.Items;
 using SpartaTextRPG.Managers;
 using SpartaTextRPG.Skills;
@@ -167,7 +168,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
 
         private void WriteBattleInfo(Hero hero, CreatureBase turn)
         {
-            int columnWidth = 20;
+            int columnWidth = 24;
             int turnIdx = -1;
 
             {
@@ -348,12 +349,12 @@ namespace SpartaTextRPG.UIs.BattleUIs
             Thread.Sleep(1000);
             Defines.MenuType[] values = [
                 Defines.MenuType.BattleAttack,
-                //Defines.MenuType.BattleAttack,
-                //Defines.MenuType.BattleAttack,
-                //Defines.MenuType.BattleAttack,
-                //Defines.MenuType.BattleAttack,
-                //Defines.MenuType.BattleSkill,
-                //Defines.MenuType.BattleSkill,
+                Defines.MenuType.BattleAttack,
+                Defines.MenuType.BattleAttack,
+                Defines.MenuType.BattleAttack,
+                Defines.MenuType.BattleAttack,
+                Defines.MenuType.BattleSkill,
+                Defines.MenuType.BattleSkill,
                 Defines.MenuType.BattleItem
             ];
             Defines.MenuType monsterActionType;
@@ -373,8 +374,11 @@ namespace SpartaTextRPG.UIs.BattleUIs
             {
                 // 아이템
                 ConsumableItem[] cItems = monster.Inventory.GetItems<ConsumableItem>();
-                ConsumableItem cItem = cItems[random.Next(cItems.Length)];
-                if (cItem != null) monster.Consume(cItem);
+                if (cItems.Length > 0)
+                {
+                    ConsumableItem cItem = cItems[random.Next(cItems.Length)];
+                    if (cItem != null) monster.Consume(cItem);
+                }
                 return;
             }
 
@@ -455,7 +459,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
                 int contentWidth = Util.GetStringWidth(content);
                 int padding = columnWidth - contentWidth;
                 int paddingLeft = padding / 2;
-                int paddingRight = padding - paddingLeft;
+                int paddingRight = Math.Max(padding - paddingLeft, 0);
 
 
                 if (turnIdx == i)
@@ -510,7 +514,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
 
                 i++;
             }
-            while (i < count);
+            while (i < count + 1);
 
             return targets.ToArray();
         }
@@ -532,7 +536,7 @@ namespace SpartaTextRPG.UIs.BattleUIs
                 if (Defines.LAST_BOSS_ID == Monsters[i].MonsterDataId)
                     boss = Monsters[i];
 
-                TextManager.LWriteLine($"{Monsters[i].Name} 등장! ({Monsters[i].Description})");
+                TextManager.HWriteLine($"{Monsters[i].Name} 등장! ({Monsters[i].Description})");
             }
             if (boss == null) return;
             isBossBattle = true;
@@ -550,6 +554,24 @@ namespace SpartaTextRPG.UIs.BattleUIs
             hero.AddExp(expSum);
             hero.Inventory.AddGold(goldSum);
             hero.BuffClear();
+            List<ItemBase> items = new List<ItemBase>();
+            foreach (Monster monster in Monsters)
+            {
+                if (monster.Inventory.IsEmpty())
+                    continue;
+                foreach (ItemBase item in monster.Inventory.GetItems())
+                {
+                    if (DataManager.Instance.ItemDict.TryGetValue(item.DataId, out ItemData? itemData) == false)
+                        continue;
+
+                    if (DataManager.Instance.MonsterDict.TryGetValue(monster.MonsterDataId, out MonsterData? monsterData) == false)
+                        continue;
+
+                    if (random.Next(0, 100) < monsterData.ItemDropRate * 100)
+                        hero.Inventory.AddItem(itemData);
+                }
+            }
+
             if (IsGameEnd())
             {
                 TextManager.HWriteLine("최종 보스를 처치했습니다.");
