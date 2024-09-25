@@ -71,7 +71,7 @@ namespace SpartaTextRPG.Maps
                         OnExit(Visitor, prevTile, tile.Value);
                         return;
                     }
-                    else if (RandomBattle(5))
+                    else if (RandomBattle(5, 1, 3))
                         return;
                 }
             }

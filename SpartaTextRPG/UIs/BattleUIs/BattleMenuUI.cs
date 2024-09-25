@@ -322,6 +322,8 @@ namespace SpartaTextRPG.UIs.BattleUIs
 
                         // 공격 스킬이 아닌 경우 플레이어한테 스킬 바로 사용
                         skill.Use();
+                        skill.RemoveCount();
+                        TurnChange(turns.Dequeue());
                         break;
                     case Defines.MenuType.BattleItem:
                         // 아이템

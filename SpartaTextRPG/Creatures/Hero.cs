@@ -119,15 +119,7 @@ namespace SpartaTextRPG.Creatures
         }
         public override void SetLevel(int level)
         {
-            // 레벨업 데이터 가져와서
-            Level = level;
-            CreatureStatData statData = DataManager.Instance.CreatureStatDict[level];
-            DefaultMaxHp = statData.MaxHp;
-            DefaultAttack = statData.Attack;
-            DefaultDefense = statData.Defense;
-            DefaultSpeed = statData.Speed;
-            NextLevelExp = statData.NextLevelExp;
-            BonusUpdate();
+            base.SetLevel(level);
         }
         public override void LevelUp()
         {

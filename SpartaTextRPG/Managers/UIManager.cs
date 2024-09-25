@@ -181,7 +181,15 @@ namespace SpartaTextRPG.Managers
         }
         public void ShowBattleStartJob(CreatureBase owner, Monster[] monsters)
         {
-            TextManager.LWriteLine($"{monsters[0].Name} 외 {monsters.Length - 1} 몬스터와 전투를 시작합니다.");
+            if (monsters.Length < 1)
+            {
+                GameManager.Instance.WakeUpWorld();
+                return;
+            }
+            else if (monsters.Length == 1)
+                TextManager.LWriteLine($"{monsters[0].Name} 몬스터와 전투를 시작합니다.");
+            else
+                TextManager.LWriteLine($"{monsters[0].Name} 외 {monsters.Length - 1}명의 몬스터와 전투를 시작합니다.");
             BattleMenuUI battleUI = new BattleMenuUI(owner);
             battleUI.SetMonsters(monsters);
             battleUI.Show();

@@ -138,6 +138,9 @@ namespace SpartaTextRPG.Managers
                 EnterdMap = null;
                 TextManager.LWriteLine("타이틀 화면으로 돌아갑니다.");
                 JobManager.Instance.Push(UIManager.Instance.GameTitle);
+            }, () =>
+            {
+                WakeUpWorld();
             });
         }
         public void GameExit()

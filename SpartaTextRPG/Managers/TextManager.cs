@@ -605,7 +605,7 @@ namespace SpartaTextRPG.Managers
             emptyLine(2);
             LWriteLine("고    생 : 김태호");
             emptyLine(2);
-            LWriteLine("특별출연 : 르탄이");
+            LWriteLine("특별출연 : 르탄이, 아네린, 로끼, 채리니, 퇴실요정");
             emptyLine(2);
             LWriteLine("지    원 : 스파르타코딩클럽 내일배움캠프");
             emptyLine(2);

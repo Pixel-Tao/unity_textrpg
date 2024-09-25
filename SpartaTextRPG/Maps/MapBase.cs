@@ -140,7 +140,7 @@ namespace SpartaTextRPG.Maps
             Leave(nextTile.TileType);
         }
         
-        protected bool RandomBattle(float percent = 10, int minMonsterCount = 1)
+        protected bool RandomBattle(float percent = 10, int minMonsterCount = 1, int maxMonsterCount = 3)
         {
             // 필드, 던전에서 이동중에 확률로 전투를 진행하도록 함.
 
@@ -150,16 +150,16 @@ namespace SpartaTextRPG.Maps
             if (rand.Next(0, 100) < percent)
             {
                 // 전투 시작
-                GameManager.Instance.BattleStart(this, GetRandomMonsters());
+                GameManager.Instance.BattleStart(this, GetRandomMonsters(minMonsterCount, maxMonsterCount));
                 return true;
             }
 
             return false;
         }
 
-        protected int[] GetRandomMonsters(int minMonsterCount = 1)
+        protected int[] GetRandomMonsters(int minMonsterCount = 1, int maxMonsterCount = 3)
         {
-            int monsterCount = rand.Next(minMonsterCount, MonsterIds.Length + 1);
+            int monsterCount = rand.Next(minMonsterCount, maxMonsterCount + 1);
 
             int[] randMonsterIds = new int[monsterCount];
             for (int i = 0; i < monsterCount; i++)
